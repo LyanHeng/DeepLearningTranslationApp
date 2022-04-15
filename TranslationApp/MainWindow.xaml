@@ -1,0 +1,27 @@
+﻿<Window x:Class="TranslationApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TranslationApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="400" Width="900"
+        x:Name="Main">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="75,25,75,230">Text To Translate</TextBlock>
+        <TextBox Grid.Row="0" Grid.Column="0" Margin="50" x:Name="textToTranslate"></TextBox>
+
+        <Button Grid.Row="0" Grid.Column="1" Margin="75,100" Height="75" Width="120" Click="Translate">Translate</Button>
+
+        <TextBlock Grid.Row="0" Grid.Column="2" Margin="25" x:Name="translatedText" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+    </Grid>
+</Window>
