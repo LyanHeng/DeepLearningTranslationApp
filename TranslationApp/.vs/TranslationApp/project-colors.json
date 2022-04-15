@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "d8b2c42e-b0a0-4dd0-8152-26081998527c": {
+      "ProjectGuid": "d8b2c42e-b0a0-4dd0-8152-26081998527c",
+      "DisplayName": "TranslationApp",
+      "ColorIndex": 0
+    },
+    "3ef2c173-4cab-4fd4-ba09-893a74470d40": {
+      "ProjectGuid": "3ef2c173-4cab-4fd4-ba09-893a74470d40",
+      "DisplayName": "TranslationApp",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
