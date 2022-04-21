@@ -11,4 +11,8 @@
     <PackageReference Include="Google.Cloud.Translation.V2" Version="2.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>
