@@ -1,0 +1,13 @@
+Test cases:
+# Number and Text Structure
+- Translate nothing					-- causes no failure, just returns empty string
+- Translate full sentence				-- all good
+- Translate multiple sentences				-- all good (seems like Google API handles that very well)
+- Translate a paragraph
+- Find the Limit of the API				-- 5000 characters
+
+# Languages
+- Incomprehensible texts
+- Translate from other languages
+- Symbols & Numbers
+- Emoji or other inputs that should be prevented
