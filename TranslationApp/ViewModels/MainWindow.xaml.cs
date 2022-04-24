@@ -16,6 +16,8 @@ namespace TranslationApp
             // retrieve API Key from Environment variable set up
             // TODO v0.5 - set up the key in a config file
             var client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
+            // TODO v1.1 - have language be dynamic
+            // Blocked - waiting on UI to be finished to retrieve from UI
             var response = client.TranslateText(textToTranslate.Text, LanguageCodes.French);
 
             translatedText.Text = response.TranslatedText;
