@@ -18,7 +18,7 @@ The project will be used for the following objectives:
 
 To build and use the project:
 
-1. Download and setup **Visual Studio 2022** with **.NET framework 4.8**.
+1. Download and setup **Visual Studio 2019** with **.NET framework 4.8**.
 2. Make a clone of this repository.
 3. Load the project by running the csproj file on Visual Studio.
 4. Navigate to the NUGET installer and install **Google.Cloud.Translation.V2** package.
