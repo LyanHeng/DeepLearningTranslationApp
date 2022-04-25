@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="900"
         x:Name="Main">
-    <Grid>
+    <Grid Background="DarkGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
@@ -17,11 +17,120 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Margin="75,25,75,230">Text To Translate</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="0" Margin="50" x:Name="textToTranslate"></TextBox>
+        <TextBox 
+            Grid.Row="0" 
+            Grid.Column="0" 
+            Margin="50,100,50.333,49.667"
+            BorderBrush="LightGray"
+            Background="Transparent"
+            x:Name="textToTranslate">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="7"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
 
-        <Button Grid.Row="0" Grid.Column="1" Margin="75,100" Height="75" Width="120" Click="Translate">Translate</Button>
+        <Button 
+            Grid.Row="0" 
+            Grid.Column="1" 
+            Margin="75,100" 
+            Height="75" 
+            Width="120" 
+            Background="LightGray"
+            BorderBrush="Gray"
+            Click="Translate" 
+            Content="Translate">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="7" />
+                </Style>
+            </Button.Resources>
+        </Button>
 
-        <TextBlock Grid.Row="0" Grid.Column="2" Margin="25" x:Name="translatedText" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+
+        <Border 
+            BorderBrush="LightGray" 
+            BorderThickness="0.5" 
+            HorizontalAlignment="Left" 
+            Height="111" 
+            Margin="50,100,0,0" 
+            VerticalAlignment="Top" 
+            Width="100" 
+            CornerRadius="7" Grid.Column="2">
+            <Border.LayoutTransform>
+                <ScaleTransform ScaleX="2" ScaleY="2"/>
+            </Border.LayoutTransform>
+            <TextBlock 
+            Grid.Row="0" 
+            Grid.Column="2" 
+            Margin="25" 
+            x:Name="translatedText" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center">
+            </TextBlock>
+        </Border>
+
+
+
+        <ComboBox 
+            Margin="150,23,33.333,310.667" 
+            Text="Select Language" 
+            IsEditable="True"
+            IsReadOnly="True">
+            <ComboBoxItem>
+                <TextBlock><Run Text="French"/></TextBlock>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock><Run Text="Greek"/></TextBlock>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock><Run Text="German"/></TextBlock>
+            </ComboBoxItem>
+        </ComboBox>
+        <Button 
+            Name="btnOpenFile" 
+            Click="btnOpenFile_Click"
+            Content="File" 
+            HorizontalAlignment="Left" 
+            Margin="50,39,0,0" 
+            VerticalAlignment="Top" 
+            Width="75">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="7"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+
+        <Button 
+            Content="Input Text" 
+            HorizontalAlignment="Left" 
+            Margin="50,13,0,0" 
+            VerticalAlignment="Top" 
+            Width="75">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="7"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <ComboBox 
+            Margin="57.667,23,126.333,310.667" 
+            Text="Select Language" 
+            IsEditable="True"
+            IsReadOnly="True" Grid.Column="2">
+            <ComboBoxItem>
+                <TextBlock><Run Text="French"/></TextBlock>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock><Run Text="Greek"/></TextBlock>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock><Run Text="German"/></TextBlock>
+            </ComboBoxItem>
+        </ComboBox>
+
     </Grid>
 </Window>

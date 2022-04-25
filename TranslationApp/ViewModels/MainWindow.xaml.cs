@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using Google.Cloud.Translation.V2;
+using Microsoft.Win32;
 
 namespace TranslationApp
 {
@@ -19,6 +21,15 @@ namespace TranslationApp
             var response = client.TranslateText(textToTranslate.Text, LanguageCodes.French);
 
             translatedText.Text = response.TranslatedText;
+        }
+        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            // Create OpenFileDialog
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+                textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+
         }
     }
 }
