@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Windows;
 using Google.Cloud.Translation.V2;
@@ -30,6 +30,21 @@ namespace TranslationApp
             if (openFileDialog.ShowDialog() == true)
                 textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
 
+        }
+        private void LightModeChecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.TranslationApp = "Light";
+
+            //and to save the settings
+            Properties.Settings.Default.Save();
+        }
+
+        private void DarkModeChecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.TranslationApp = "Dark";
+
+            //and to save the settings
+            Properties.Settings.Default.Save();
         }
     }
 }
