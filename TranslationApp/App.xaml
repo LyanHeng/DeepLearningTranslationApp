@@ -49,10 +49,12 @@
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Dark">
                         <Setter Property="Background" Value="#064663"/>
+                        <Setter Property="Foreground" Value="White"/>
                     </DataTrigger>
 
                     <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Light">
                         <Setter Property="Background" Value="#F7ECDE"/>
+                        <Setter Property="Foreground" Value="Black"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
