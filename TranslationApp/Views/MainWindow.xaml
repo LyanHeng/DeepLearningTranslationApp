@@ -25,11 +25,11 @@
                      BorderThickness="1"
                      VerticalAlignment="Stretch"
                      HorizontalAlignment="Stretch"
-                     Foreground="Black"
                      x:Name="textToTranslate"
                      TextWrapping="Wrap"
                      VerticalScrollBarVisibility="Hidden"
                      AcceptsReturn="True"
+                     FontSize="13"
                      Grid.Row="1" 
                      Grid.Column="2" 
                      Margin="50,50,50,50"
@@ -162,6 +162,7 @@
             BorderBrush="DarkGray"
             x:Name="translatedText"
             BorderThickness="1"
+            FontSize="13"
             Style="{StaticResource TextBoxStyle}"
             IsReadOnly="True">
             <TextBox.Resources>
