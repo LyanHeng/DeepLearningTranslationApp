@@ -36,11 +36,3 @@ To build and use the project:
 - Google Cloud Account & API keys
 
 ---
-
-## References
-
----
-
-TBD
-
----
