@@ -15,6 +15,12 @@ namespace TranslationApp
 
         private void Translate(object sender, RoutedEventArgs e)
         {
+            if (textToTranslate.Text.Length >= 5000)
+            {
+                translatedText.Text = "Google API does not support translation above 5000 characters.";
+                return;
+            }
+            
             // retrieve API Key from Environment variable set up
             // TODO v0.5 - set up the key in a config file
             var client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
