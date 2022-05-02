@@ -35,8 +35,16 @@ namespace TranslationApp
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
                 textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
-
         }
+
+        private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
+        }
+
         private void LightModeChecked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.TranslationApp = "Light";
