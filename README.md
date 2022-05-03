@@ -28,6 +28,16 @@ To build and use the project:
 
 ---
 
+## Application Features
+
+---
+
+1. Translate given text in the text box into any of the Google's supported languages.
+2. Translate given txt/pdf file with the file button.
+3. Export translated text into txt/pdf file.
+
+---
+
 ## Dependencies
 
 ---
