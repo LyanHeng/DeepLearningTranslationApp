@@ -120,22 +120,11 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="LightGray" />
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Gray" />
             </ComboBox.Resources>
-
-            <ComboBoxItem>
-                <TextBlock><Run Text="French"/></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock><Run Text="Greek"/></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock><Run Text="German"/></TextBlock>
-            </ComboBoxItem>
         </ComboBox>
 
         <ComboBox 
             Name="box2"
-            Margin="20,20,150,20" 
-            Text="Auto-Detect" 
+            Margin="20,20,150,20"
             HorizontalAlignment="Stretch"
             FontFamily="calibri"
             IsEditable="True"
@@ -144,15 +133,6 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="LightGray" />
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Gray" />
             </ComboBox.Resources>
-            <ComboBoxItem Name="french">
-                <TextBlock ><Run Text="French"/></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem Name="greek">
-                <TextBlock ><Run Text="Greek"/></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem Name="german">
-                <TextBlock ><Run Text="German"/></TextBlock>
-            </ComboBoxItem>
         </ComboBox>
 
         <TextBox 
