@@ -3,6 +3,10 @@ using System.IO;
 using System.Windows;
 using Google.Cloud.Translation.V2;
 using Microsoft.Win32;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.Content;
+using PdfSharp.Pdf.Content.Objects;
+using static TranslationApp.Classes.PdfSharpExtensions;
 
 namespace TranslationApp
 {
@@ -34,8 +38,13 @@ namespace TranslationApp
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
-                textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
-
+            {
+                //assume a pdf is coming for now
+                string testing = TranslationApp.Classes.PdfSharpExtensions.GetText(openFileDialog.FileName);
+                //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                textToTranslate.Text = testing;
+            }
+            
         }
         private void LightModeChecked(object sender, RoutedEventArgs e)
         {
