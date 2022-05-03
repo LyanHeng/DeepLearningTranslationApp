@@ -117,8 +117,7 @@
             IsReadOnly="True"
             FontFamily="calibri">
             <ComboBox.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="LightGray" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Gray" />
+             
             </ComboBox.Resources>
 
             <ComboBoxItem>
@@ -140,10 +139,6 @@
             FontFamily="calibri"
             IsEditable="True"
             IsReadOnly="True" Grid.Column="2">
-            <ComboBox.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="LightGray" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Gray" />
-            </ComboBox.Resources>
             <ComboBoxItem Name="french">
                 <TextBlock ><Run Text="French"/></TextBlock>
             </ComboBoxItem>
