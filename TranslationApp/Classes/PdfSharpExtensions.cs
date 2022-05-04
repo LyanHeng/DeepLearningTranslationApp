@@ -15,36 +15,28 @@ namespace TranslationApp.Classes
 
         public static string GetText(string pdfFileName)
         {
-            PdfDocument SamplePdf = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
+            PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
             string sentence = "";
-            // PdfPage SamplePage = SamplePdf.Pages[0];
-            //PdfDictionary.PdfStream stream = SamplePage.Contents.Elements.GetDictionary(0).Stream;
-
-            /*var content = ContentReader.ReadContent(SamplePage);
-            string sentence = "";
-            var text = ExtractText(content);
-            foreach(var i in text)
+            /*
+             * Still TODO:
+             * figure out how to split strings and keep some semblance of structure to the document 
+             * Will need to look under the hood of the document reading part 
+             * clean up file and remove unecassary code
+             * 
+            */
+            foreach (PdfPage page in OriginPDF.Pages)
             {
-            //string.Join(sentence);
-                 sentence += i.ToString();
-
-            }*/
-            //Console.WriteLine(text);
-            //return sentence;
-            //int count = 0;//SamplePdf.Pages.Count;
-            foreach (PdfPage page in SamplePdf.Pages)
-            {
-                PdfPage aPage = SamplePdf.Pages[count];
-                PdfDictionary.PdfStream stream = aPage.Contents.Elements.GetDictionary(count).Stream;
-               // count++;
-                var content = ContentReader.ReadContent(aPage);
+                PdfDictionary.PdfStream stream = page.Contents.Elements.GetDictionary(0).Stream;
+                var content = ContentReader.ReadContent(page);
                 var text = ExtractText(content);
 
                 foreach (var i in text)
                 {
+                    //add paragraph/structure handling here 
                     sentence += i.ToString();
                 }
-                /*using (var _document = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly))
+                /*OLD (maybe) redudant loop for reading PDFS
+                 * using (var _document = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly))
                 {
                     //PdfDictionary.PdfStream stream = 
                     var result = new StringBuilder();
@@ -57,6 +49,7 @@ namespace TranslationApp.Classes
 
                 }*/
             }
+            //maybe string builder??
             return sentence;
         }
 

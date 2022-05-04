@@ -40,8 +40,14 @@ namespace TranslationApp
             if (openFileDialog.ShowDialog() == true)
             {
                 //assume a pdf is coming for now
+                //will need to add type of file detection 
                 string testing = TranslationApp.Classes.PdfSharpExtensions.GetText(openFileDialog.FileName);
-                //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+
+                /*
+                 * for .txt files 
+                 * add handling for file type here
+                 * textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                 */
                 textToTranslate.Text = testing;
             }
             
