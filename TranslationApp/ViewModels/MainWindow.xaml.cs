@@ -46,8 +46,16 @@ namespace TranslationApp
             }
             else
             {
-                //assume that there is a existing PDF for now 
-                ExportPDF(FPATH, translatedText.Text);
+                //assume that there is a existing PDF for now
+                if (FPATH != "")
+                {
+                    ExportPDF(FPATH, translatedText.Text);
+                }
+                else 
+                {
+                    textToTranslate.Text = "Must be a original PDF for now";
+                }
+               
             }
         }
 
