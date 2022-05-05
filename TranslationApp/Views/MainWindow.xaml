@@ -44,7 +44,7 @@
                 </TextBox.Resources>
             </TextBox>
 
-                <TextBlock IsHitTestVisible="False"
+            <TextBlock IsHitTestVisible="False"
                        Text="Enter text"
                        VerticalAlignment="Top"
                        Margin="50,50,50,50"
@@ -94,7 +94,7 @@
                 </Style>
             </Button.Resources>
         </Button>
-        
+
         <!--<Button 
             Content="Input Text" 
             HorizontalAlignment="Left" 
@@ -182,7 +182,7 @@
                      IsChecked="True"
                      GroupName="modeSelection"
                      Checked="LightModeChecked"/>
-        
+
         <RadioButton Grid.Row="0"
                      Grid.Column="2"
                      HorizontalAlignment="Right"
@@ -193,5 +193,22 @@
                      IsChecked="False"
                      GroupName="modeSelection"
                      Checked="DarkModeChecked"/>
+
+        <Button x:Name="btnExportPDFFile"
+                Click="btnExportPDFFile_Click"
+                Content="Export to .PDF"
+                HorizontalAlignment="Left"
+                Margin="175,264,0,0"
+                VerticalAlignment="Top"
+                Width="75"
+                Grid.Column="2"
+                Grid.Row="1">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius"
+                            Value="7" />
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>

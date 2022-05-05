@@ -15,6 +15,22 @@ namespace TranslationApp.Classes
     public static class PdfSharpExtensions
     {
 
+        public static List<string> Format(string text)
+        {
+            //maybe need to add divide for length of string 
+            string tobe = "";
+            List<string> divided = new List<string>();
+            foreach(var i in text)
+            {                
+                tobe += i.ToString(); 
+                if(i.ToString() == "." || i.ToString() == "!" || i.ToString() == "?")
+                {
+                    divided.Add(tobe);                    
+                    tobe = null;
+                }
+            }
+            return divided; //returns list of strings divided by punctuation 
+        }
         public static void ExportPDF(string pdfFileName, string text )
         {
             PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
@@ -23,20 +39,47 @@ namespace TranslationApp.Classes
             string name = OriginPDF.Info.Title + "_Translated";//not sure about keeping this
             NewDocument.Info.Title = OriginPDF.Info.Title + "_Translated";
 
-            //Will need to add loop for adding pages but leave for now
+            
+            List<string> division = Format(text);
+
+            /*template for proper implementaion
+             * a new page is created for each page of doc
+             * cannot be further implemented due to there being no way of preserving original structure
+             * export to pdf will need to be reworked for original structure to be preserved
+             * To be further touched upon in SEM 1 final sprint
+            foreach (PdfPage pages in OriginPDF.Pages)
+            { 
+                PdfPage a_page = NewDocument.AddPage();
+                XGraphics a_gfx = XGraphics.FromPdfPage(a_page);
+                //draw strings
+                //do next page 
+                //
+            }
+            */
             PdfPage page = NewDocument.AddPage();
             XGraphics gfx = XGraphics.FromPdfPage(page);
             XFont Sfont = new XFont("Verdana", 5, XFontStyle.Italic);
             XFont font = new XFont("Verdana", 10, XFontStyle.Regular);
+            //for testing string divider only 
+            XRect rect1 = new XRect(10, 10, page.Width / 3, page.Height / 3);
+            XRect rect2 = new XRect(10, 20, page.Width / 3, page.Height / 3);
+            //to do divide the page 
+            //consult http://www.pdfsharp.net/wiki/TextLayout-sample.ashx
+            //formatting looks bad atm
 
-            //formatting looks bad atm 
+            //maybe add draw for title here, or remove need for original file 
+
+            //shilling wordwise 
             gfx.DrawString("Document translated by WordWise", Sfont, XBrushes.Red,
             new XRect(20, 20, 50, 50),
             XStringFormats.Center);
-
-            gfx.DrawString(text, font, XBrushes.Black,
-            new XRect(10, 10, page.Width/3, page.Height/3),
-            XStringFormats.CenterLeft);
+            int y = 10;
+            foreach (var i in division)
+            {
+                XRect rect = new XRect(10, y, page.Width / 10, page.Height / 5);
+                gfx.DrawString(i, font, XBrushes.Black, rect, XStringFormats.CenterLeft);
+                y = y + 10;
+            }
             const string filename = "test.pdf";
             NewDocument.Save(filename);
             Process.Start(filename);
@@ -49,9 +92,7 @@ namespace TranslationApp.Classes
             /*
              * Still TODO:
              * figure out how to split strings and keep some semblance of structure to the document 
-             * Will need to look under the hood of the document reading part 
-             * clean up file and remove unecassary code
-             * 
+             * Change Export to PDF to be done in this section 
             */
             foreach (PdfPage page in OriginPDF.Pages)
             {
@@ -66,23 +107,10 @@ namespace TranslationApp.Classes
                     //unrealistic to do it properly on this end i beleive 
                     sentence += i.ToString();
                 }
-                /*OLD (maybe) redudant loop for reading PDFS
-                 * using (var _document = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly))
-                {
-                    //PdfDictionary.PdfStream stream = 
-                    var result = new StringBuilder();
-                    foreach (var page in _document.Pages.OfType<PdfPage>())
-                    {
-                        ExtractText(ContentReader.ReadContent(page), result);
-                        result.AppendLine();
-                    }
-                    return result.ToString();
-
-                }*/
             }
-            //maybe string builder??
             return sentence;
         }
+        //could be used with export to txt functioanlity ?
         public static IEnumerable<string> ExtractText(this PdfPage page)
         {
             var content = ContentReader.ReadContent(page);

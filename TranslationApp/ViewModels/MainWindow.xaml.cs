@@ -17,7 +17,6 @@ namespace TranslationApp
          * 
          * */
         string FPATH = "";
-        string TRTXT = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -37,9 +36,21 @@ namespace TranslationApp
             var response = client.TranslateText(textToTranslate.Text, LanguageCodes.French);
 
             translatedText.Text = response.TranslatedText;
-            TranslationApp.Classes.PdfSharpExtensions.ExportPDF(FPATH, translatedText.Text);
-
+           
         }
+        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (translatedText.Text == "")
+            {
+                //add error handling 
+            }
+            else
+            {
+                //assume that there is a existing PDF for now 
+                ExportPDF(FPATH, translatedText.Text);
+            }
+        }
+
         private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog
@@ -54,15 +65,9 @@ namespace TranslationApp
                 }
                 else if (ext == ".pdf")
                 {
-                    string pdfContents = TranslationApp.Classes.PdfSharpExtensions.GetText(openFileDialog.FileName);
+                    string pdfContents = GetText(openFileDialog.FileName);
                     textToTranslate.Text = pdfContents;
                     FPATH = openFileDialog.FileName;
-                    //add 'export to pdf functionality here'
-                    /*
-                     * Want to deleiver it 1 page at a time 
-                     * 
-                     */
-                    //TranslationApp.Classes.PdfSharpExtensions.ExportPDF(openFileDialog.FileName, translatedText.Text);
                 }
                 else
                     textToTranslate.Text = "Current file format is not supported";
