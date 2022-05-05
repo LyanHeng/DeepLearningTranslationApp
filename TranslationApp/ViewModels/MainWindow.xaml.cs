@@ -12,6 +12,12 @@ namespace TranslationApp
 {
     public partial class MainWindow : Window
     {
+        /*
+         * Setting gloabl variables for the purpose of testing, should be removed in future 
+         * 
+         * */
+        string FPATH = "";
+        string TRTXT = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -31,6 +37,8 @@ namespace TranslationApp
             var response = client.TranslateText(textToTranslate.Text, LanguageCodes.French);
 
             translatedText.Text = response.TranslatedText;
+            TranslationApp.Classes.PdfSharpExtensions.ExportPDF(FPATH, translatedText.Text);
+
         }
         private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         {
@@ -39,16 +47,26 @@ namespace TranslationApp
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                //assume a pdf is coming for now
-                //will need to add type of file detection 
-                string testing = TranslationApp.Classes.PdfSharpExtensions.GetText(openFileDialog.FileName);
-
-                /*
-                 * for .txt files 
-                 * add handling for file type here
-                 * textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
-                 */
-                textToTranslate.Text = testing;
+                string ext = Path.GetExtension(openFileDialog.FileName);
+                if (ext == ".txt")
+                {
+                    textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                }
+                else if (ext == ".pdf")
+                {
+                    string pdfContents = TranslationApp.Classes.PdfSharpExtensions.GetText(openFileDialog.FileName);
+                    textToTranslate.Text = pdfContents;
+                    FPATH = openFileDialog.FileName;
+                    //add 'export to pdf functionality here'
+                    /*
+                     * Want to deleiver it 1 page at a time 
+                     * 
+                     */
+                    //TranslationApp.Classes.PdfSharpExtensions.ExportPDF(openFileDialog.FileName, translatedText.Text);
+                }
+                else
+                    textToTranslate.Text = "Current file format is not supported";
+                
             }
             
         }

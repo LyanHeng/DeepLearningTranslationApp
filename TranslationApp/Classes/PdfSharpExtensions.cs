@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Content;
 using PdfSharp.Pdf.Content.Objects;
@@ -13,6 +15,33 @@ namespace TranslationApp.Classes
     public static class PdfSharpExtensions
     {
 
+        public static void ExportPDF(string pdfFileName, string text )
+        {
+            PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
+            PdfDocument NewDocument = new PdfDocument();
+            //create document info 
+            string name = OriginPDF.Info.Title + "_Translated";//not sure about keeping this
+            NewDocument.Info.Title = OriginPDF.Info.Title + "_Translated";
+
+            //Will need to add loop for adding pages but leave for now
+            PdfPage page = NewDocument.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            XFont Sfont = new XFont("Verdana", 5, XFontStyle.Italic);
+            XFont font = new XFont("Verdana", 10, XFontStyle.Regular);
+
+            //formatting looks bad atm 
+            gfx.DrawString("Document translated by WordWise", Sfont, XBrushes.Red,
+            new XRect(20, 20, 50, 50),
+            XStringFormats.Center);
+
+            gfx.DrawString(text, font, XBrushes.Black,
+            new XRect(10, 10, page.Width/3, page.Height/3),
+            XStringFormats.CenterLeft);
+            const string filename = "test.pdf";
+            NewDocument.Save(filename);
+            Process.Start(filename);
+
+        }
         public static string GetText(string pdfFileName)
         {
             PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
@@ -28,11 +57,13 @@ namespace TranslationApp.Classes
             {
                 PdfDictionary.PdfStream stream = page.Contents.Elements.GetDictionary(0).Stream;
                 var content = ContentReader.ReadContent(page);
+                //var result = new StringBuilder();
                 var text = ExtractText(content);
 
                 foreach (var i in text)
                 {
-                    //add paragraph/structure handling here 
+                    //add paragraph/structure handling here
+                    //unrealistic to do it properly on this end i beleive 
                     sentence += i.ToString();
                 }
                 /*OLD (maybe) redudant loop for reading PDFS
@@ -52,68 +83,6 @@ namespace TranslationApp.Classes
             //maybe string builder??
             return sentence;
         }
-
-        #region CObject Visitor
-        private static void ExtractText(CObject obj, StringBuilder target)
-        {
-            if (obj is CArray)
-                ExtractText((CArray)obj, target);
-            else if (obj is CComment)
-                ExtractText((CComment)obj, target);
-            else if (obj is CInteger)
-                ExtractText((CInteger)obj, target);
-            else if (obj is CName)
-                ExtractText((CName)obj, target);
-            else if (obj is CNumber)
-                ExtractText((CNumber)obj, target);
-            else if (obj is COperator)
-                ExtractText((COperator)obj, target);
-            else if (obj is CReal)
-                ExtractText((CReal)obj, target);
-            else if (obj is CSequence)
-                ExtractText((CSequence)obj, target);
-            else if (obj is CString)
-                ExtractText((CString)obj, target);
-            else
-                throw new NotImplementedException(obj.GetType().AssemblyQualifiedName);
-        }
-        private static void ExtractText(CArray obj, StringBuilder target)
-        {
-            foreach (var element in obj)
-            {
-                ExtractText(element, target);
-            }
-        }
-        private static void ExtractText(CComment obj, StringBuilder target) { /* nothing */ }
-        private static void ExtractText(CInteger obj, StringBuilder target) { /* nothing */ }
-        private static void ExtractText(CName obj, StringBuilder target) { /* nothing */ }
-        private static void ExtractText(CNumber obj, StringBuilder target) { /* nothing */ }
-        private static void ExtractText(COperator obj, StringBuilder target)
-        {
-            if (obj.OpCode.OpCodeName == OpCodeName.Tj || obj.OpCode.OpCodeName == OpCodeName.TJ)
-            {
-                foreach (var element in obj.Operands)
-                {
-                    ExtractText(element, target);
-                }
-                target.Append(" ");
-            }
-        }
-        private static void ExtractText(CReal obj, StringBuilder target) { /* nothing */ }
-        private static void ExtractText(CSequence obj, StringBuilder target)
-        {
-            foreach (var element in obj)
-            {
-                ExtractText(element, target);
-            }
-        }
-        private static void ExtractText(CString obj, StringBuilder target)
-        {
-            target.Append(obj.Value);
-        }
-        #endregion
-
-
         public static IEnumerable<string> ExtractText(this PdfPage page)
         {
             var content = ContentReader.ReadContent(page);
@@ -149,3 +118,6 @@ namespace TranslationApp.Classes
         }
     }
 }
+
+        
+
