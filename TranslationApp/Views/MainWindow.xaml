@@ -123,16 +123,6 @@
             <ComboBox.Resources>
 
             </ComboBox.Resources>
-
-            <ComboBoxItem>
-                <TextBlock><Run Text="French"/></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock><Run Text="Greek"/></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock><Run Text="German"/></TextBlock>
-            </ComboBoxItem>
         </ComboBox>-->
         
 
