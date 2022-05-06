@@ -72,7 +72,14 @@ namespace TranslationApp
             openFileDialog.Filter = "All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
                 textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+        }
 
+        private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
         }
 
         // triggers application light mode

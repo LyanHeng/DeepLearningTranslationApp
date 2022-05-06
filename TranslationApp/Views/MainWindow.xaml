@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TranslationApp"
         mc:Ignorable="d"
-        Title="Word Wise" Height="400" Width="900" MinHeight="400" MinWidth="900"
+        Title="Word Wise"
+        Height="400"
+        Width="900"
+        MinHeight="400"
+        MinWidth="900"
         ResizeMode="CanResizeWithGrip"
         x:Name="Main"
         Style="{StaticResource WindowStyle}">
@@ -16,16 +20,18 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75"/>
+            <RowDefinition Height="75" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="1" Grid.Column="0">
-            <TextBox
+        <Grid Grid.Row="1"
+              Grid.Column="0">
+            <TextBox x:Name="textToTranslate"
+                     Grid.Row="1"
+                     Grid.Column="2"
                      BorderThickness="1"
                      VerticalAlignment="Stretch"
                      HorizontalAlignment="Stretch"
-                     x:Name="textToTranslate"
                      TextWrapping="Wrap"
                      VerticalScrollBarVisibility="Hidden"
                      AcceptsReturn="True"
@@ -40,7 +46,8 @@
                      Style="{StaticResource TextBoxStyle}">
                 <TextBox.Resources>
                     <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="7" />
+                        <Setter Property="CornerRadius"
+                                Value="7" />
                     </Style>
                 </TextBox.Resources>
             </TextBox>
@@ -57,11 +64,14 @@
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Text, ElementName=textToTranslate}" Value="">
-                                <Setter Property="Visibility" Value="Visible"/>
+                            <DataTrigger Binding="{Binding Text, ElementName=textToTranslate}"
+                                         Value="">
+                                <Setter Property="Visibility"
+                                        Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
-                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Setter Property="Visibility"
+                                Value="Hidden" />
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
@@ -78,7 +88,8 @@
             Content="Translate">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="7" />
+                    <Setter Property="CornerRadius"
+                            Value="7" />
                 </Style>
             </Button.Resources>
         </Button>
@@ -94,7 +105,8 @@
             Width="75">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="7"/>
+                    <Setter Property="CornerRadius"
+                            Value="7" />
                 </Style>
             </Button.Resources>
         </Button>
@@ -135,13 +147,13 @@
             IsEditable="True"
             IsReadOnly="True" Grid.Column="2">
             <ComboBoxItem Name="french">
-                <TextBlock ><Run Text="French"/></TextBlock>
+                <TextBlock><Run Text="French" /></TextBlock>
             </ComboBoxItem>
             <ComboBoxItem Name="greek">
-                <TextBlock ><Run Text="Greek"/></TextBlock>
+                <TextBlock><Run Text="Greek" /></TextBlock>
             </ComboBoxItem>
             <ComboBoxItem Name="german">
-                <TextBlock ><Run Text="German"/></TextBlock>
+                <TextBlock><Run Text="German" /></TextBlock>
             </ComboBoxItem>
         </ComboBox>
 
@@ -158,7 +170,8 @@
             IsReadOnly="True">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="7" />
+                    <Setter Property="CornerRadius"
+                            Value="7" />
                 </Style>
             </TextBox.Resources>
         </TextBox>
@@ -185,6 +198,23 @@
                      IsChecked="False"
                      FontFamily="/Fonts/#Roboto"
                      GroupName="modeSelection"
-                     Checked="DarkModeChecked"/>
+                     Checked="DarkModeChecked" />
+
+        <Button x:Name="btnExportTxtFile"
+                Click="btnExportTxtFile_Click"
+                Content="Export to .txt"
+                HorizontalAlignment="Left"
+                Margin="50,249.8,0,0"
+                VerticalAlignment="Top"
+                Width="75"
+                Grid.Column="2"
+                Grid.Row="1">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius"
+                            Value="7" />
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>
