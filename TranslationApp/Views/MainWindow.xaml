@@ -37,8 +37,6 @@
                      AcceptsReturn="True"
                      FontSize="12"
                      FontFamily="/Fonts/#Roboto"
-                     Grid.Row="1" 
-                     Grid.Column="2" 
                      Margin="50,50,50,50"
                      MinHeight="180"
                      MinWidth="190"
@@ -136,7 +134,7 @@
 
             </ComboBox.Resources>
         </ComboBox>-->
-        
+
 
         <ComboBox 
             Name="box2"
@@ -146,15 +144,6 @@
             FontFamily="/Fonts/#Roboto"
             IsEditable="True"
             IsReadOnly="True" Grid.Column="2">
-            <ComboBoxItem Name="french">
-                <TextBlock><Run Text="French" /></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem Name="greek">
-                <TextBlock><Run Text="Greek" /></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem Name="german">
-                <TextBlock><Run Text="German" /></TextBlock>
-            </ComboBoxItem>
         </ComboBox>
 
         <TextBox 

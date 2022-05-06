@@ -25,6 +25,7 @@ namespace TranslationApp
         // retrieve all supported languages from Google Service
         private void PopulateLanguageComboBoxes()
         {
+            box2.Items.Clear();
             // get all supported language by Google
             // "en" - defines the language of all the names of the languages
             IList<Language> supportedLanguages = Client.ListLanguages("en");
