@@ -12,10 +12,6 @@ namespace TranslationApp
 {
     public partial class MainWindow : Window
     {
-        /*
-         * Setting gloabl variables for the purpose of testing, should be removed in future 
-         * 
-         * */
         string FPATH = "";
         public MainWindow()
         {
@@ -38,26 +34,7 @@ namespace TranslationApp
             translatedText.Text = response.TranslatedText;
            
         }
-        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
-        {
-            if (translatedText.Text == "")
-            {
-                //add error handling 
-            }
-            else
-            {
-                //assume that there is a existing PDF for now
-                if (FPATH != "")
-                {
-                    ExportPDF(FPATH, translatedText.Text);
-                }
-                else 
-                {
-                    textToTranslate.Text = "Must be a original PDF for now";
-                }
-               
-            }
-        }
+ 
 
         private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         {
@@ -97,6 +74,27 @@ namespace TranslationApp
 
             //and to save the settings
             Properties.Settings.Default.Save();
+        }
+
+        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (translatedText.Text == "")
+            {
+                //add error handling 
+            }
+            else
+            {
+                //assume that there is a existing PDF for now
+                if (FPATH != "")
+                {
+                    ExportPDF(FPATH, translatedText.Text);
+                }
+                else
+                {
+                    textToTranslate.Text = "Must be a original PDF for now";
+                }
+
+            }
         }
     }
 }
