@@ -69,7 +69,7 @@ namespace TranslationApp
         {
             // Create OpenFileDialog
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.Filter = "All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
                 textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
 
