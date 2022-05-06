@@ -4,17 +4,21 @@ using System.Windows;
 using System.Collections.Generic;
 using Google.Cloud.Translation.V2;
 using Microsoft.Win32;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.Content;
+using PdfSharp.Pdf.Content.Objects;
+using static TranslationApp.Classes.PdfSharpExtensions;
 
 namespace TranslationApp
 {
     public partial class MainWindow : Window
     {
+        string FPATH = "";
         private Dictionary<string, string> m_languagesKeys = new Dictionary<string, string>();
         private TranslationClient m_client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
 
         public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
         public TranslationClient Client { get => m_client; }
-
         public MainWindow()
         {
             InitializeComponent();
@@ -47,7 +51,6 @@ namespace TranslationApp
                 translatedText.Text = "Google API does not support translation above 5000 characters.";
                 return;
             }
-
             try
             {
                 var response = Client.TranslateText(textToTranslate.Text, LanguageKeys[box2.SelectedItem.ToString()]);
@@ -71,15 +74,54 @@ namespace TranslationApp
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
+            {
+                string ext = Path.GetExtension(openFileDialog.FileName);
+                if (ext == ".txt")
+                {
+                    textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                }
+                else if (ext == ".pdf")
+                {
+                    string pdfContents = GetText(openFileDialog.FileName);
+                    textToTranslate.Text = pdfContents;
+                    FPATH = openFileDialog.FileName;
+                }
+                else
+                    textToTranslate.Text = "Current file format is not supported";
+                
+            }
+            
+        }
+        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (translatedText.Text == "")
+            {
+                //add error handling 
+            }
+            else
+            {
+                //assume that there is a existing PDF for now
+                if (FPATH != "")
+                {
+                    ExportPDF(FPATH, translatedText.Text);
+                }
+                else
+                {
+                    textToTranslate.Text = "Must be a original PDF for now";
+                }
+
+            }
+
                 textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
         }
-
+        
         private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
             if (saveFileDialog.ShowDialog() == true)
                 File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
+
         }
 
         // triggers application light mode
@@ -99,6 +141,5 @@ namespace TranslationApp
             //and to save the settings
             Properties.Settings.Default.Save();
         }
-        #endregion
     }
 }
