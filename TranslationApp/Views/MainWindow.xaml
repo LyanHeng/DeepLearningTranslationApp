@@ -35,7 +35,10 @@
                      TextWrapping="Wrap"
                      VerticalScrollBarVisibility="Hidden"
                      AcceptsReturn="True"
-                     FontSize="13"
+                     FontSize="12"
+                     FontFamily="/Fonts/#Roboto"
+                     Grid.Row="1" 
+                     Grid.Column="2" 
                      Margin="50,50,50,50"
                      MinHeight="180"
                      MinWidth="190"
@@ -50,11 +53,12 @@
             </TextBox>
 
             <TextBlock IsHitTestVisible="False"
-                       Text="Enter text"
+                       Text="Detect language"
                        VerticalAlignment="Top"
                        Margin="50,50,50,50"
                        Padding="3,0,0,0"
                        FontSize="13"
+                       FontFamily="/Fonts/#Roboto"
                        Foreground="DarkGray"
                        Grid.Column="0">
                 <TextBlock.Style>
@@ -73,13 +77,15 @@
             </TextBlock>
         </Grid>
 
-        <Button Grid.Row="1"
-                Grid.Column="1"
-                Margin="75,100"
-                Height="75"
-                Width="120"
-                Click="Translate"
-                Content="Translate">
+        <Button 
+            Grid.Row="1" 
+            Grid.Column="1" 
+            Margin="75,100" 
+            Height="75" 
+            Width="120"
+            Click="Translate" 
+            FontFamily="/Fonts/#Roboto"
+            Content="Translate">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius"
@@ -88,13 +94,15 @@
             </Button.Resources>
         </Button>
 
-        <Button x:Name="btnOpenFile"
-                Click="btnOpenFile_Click"
-                Content="File"
-                HorizontalAlignment="Left"
-                Margin="40,28,0,0"
-                VerticalAlignment="Top"
-                Width="75">
+        <Button 
+            Name="btnOpenFile" 
+            Click="btnOpenFile_Click"
+            Content="File" 
+            HorizontalAlignment="Left" 
+            Margin="40,28,0,0" 
+            VerticalAlignment="Top" 
+            FontFamily="/Fonts/#Roboto"
+            Width="75">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius"
@@ -116,45 +124,28 @@
             </Button.Resources>
         </Button>-->
 
-        <ComboBox Name="box1"
-                  Margin="150,20,20,20"
-                  Text="Auto-Detect"
-                  HorizontalAlignment="Stretch"
-                  IsEditable="True"
-                  IsReadOnly="True"
-                  FontFamily="calibri">
+        <!--<ComboBox 
+            Name="box1"
+            Margin="150,20,20,20" 
+            Text="Auto-Detect" 
+            HorizontalAlignment="Stretch"
+            IsEditable="True"
+            IsReadOnly="True"
+            FontFamily="calibri">
             <ComboBox.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}"
-                                 Color="LightGray" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                                 Color="Gray" />
-            </ComboBox.Resources>
 
-            <ComboBoxItem>
-                <TextBlock><Run Text="French" /></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock><Run Text="Greek" /></TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock><Run Text="German" /></TextBlock>
-            </ComboBoxItem>
-        </ComboBox>
-
-        <ComboBox Name="box2"
-                  Margin="20,20,150,20"
-                  Text="Auto-Detect"
-                  HorizontalAlignment="Stretch"
-                  FontFamily="calibri"
-                  IsEditable="True"
-                  IsReadOnly="True"
-                  Grid.Column="2">
-            <ComboBox.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}"
-                                 Color="LightGray" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                                 Color="Gray" />
             </ComboBox.Resources>
+        </ComboBox>-->
+        
+
+        <ComboBox 
+            Name="box2"
+            Margin="20,20,150,20" 
+            Text="English" 
+            HorizontalAlignment="Stretch"
+            FontFamily="/Fonts/#Roboto"
+            IsEditable="True"
+            IsReadOnly="True" Grid.Column="2">
             <ComboBoxItem Name="french">
                 <TextBlock><Run Text="French" /></TextBlock>
             </ComboBoxItem>
@@ -166,15 +157,17 @@
             </ComboBoxItem>
         </ComboBox>
 
-        <TextBox x:Name="translatedText"
-                 Grid.Row="1"
-                 Grid.Column="2"
-                 Margin="50,50,50,50"
-                 BorderBrush="DarkGray"
-                 BorderThickness="1"
-                 FontSize="13"
-                 Style="{StaticResource TextBoxStyle}"
-                 IsReadOnly="True">
+        <TextBox 
+            Grid.Row="1" 
+            Grid.Column="2" 
+            Margin="50,50,50,50"
+            BorderBrush="DarkGray"
+            x:Name="translatedText"
+            BorderThickness="1"
+            FontSize="12"
+            FontFamily="/Fonts/#Roboto"
+            Style="{StaticResource TextBoxStyle}"
+            IsReadOnly="True">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius"
@@ -191,8 +184,9 @@
                      x:Name="lightMode"
                      Content="Light"
                      IsChecked="True"
+                     FontFamily="/Fonts/#Roboto"
                      GroupName="modeSelection"
-                     Checked="LightModeChecked" />
+                     Checked="LightModeChecked"/>
 
         <RadioButton Grid.Row="0"
                      Grid.Column="2"
@@ -202,6 +196,7 @@
                      x:Name="darkMode"
                      Content="Dark"
                      IsChecked="False"
+                     FontFamily="/Fonts/#Roboto"
                      GroupName="modeSelection"
                      Checked="DarkModeChecked" />
 
