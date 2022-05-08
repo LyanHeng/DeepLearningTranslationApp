@@ -70,8 +70,17 @@ namespace TranslationApp
             // Create OpenFileDialog
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == true)
-                textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+            openFileDialog.Multiselect = true;
+            if (openFileDialog.ShowDialog() ==  true)
+                foreach (string file in openFileDialog.FileNames)
+                {
+                    string temp = textToTranslate.Text;
+                    
+                    temp = File.ReadAllText(openFileDialog.FileName);
+
+                    textToTranslate.Text += temp;
+                }
+            
 
         }
 
