@@ -139,7 +139,6 @@
         <ComboBox 
             Name="box2"
             Margin="20,20,150,20" 
-            Text="English" 
             HorizontalAlignment="Stretch"
             FontFamily="/Fonts/#Roboto"
             IsEditable="True"

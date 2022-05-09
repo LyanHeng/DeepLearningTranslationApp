@@ -37,6 +37,8 @@ namespace TranslationApp
                     box2.Items.Add(language.Name);
                 }
             }
+            // default language to english
+            box2.SelectedItem = "English";
         }
 
         // translate provided text
