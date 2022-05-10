@@ -25,6 +25,7 @@ namespace TranslationApp
         // retrieve all supported languages from Google Service
         private void PopulateLanguageComboBoxes()
         {
+            box2.Items.Clear();
             // get all supported language by Google
             // "en" - defines the language of all the names of the languages
             IList<Language> supportedLanguages = Client.ListLanguages("en");
@@ -36,6 +37,8 @@ namespace TranslationApp
                     box2.Items.Add(language.Name);
                 }
             }
+            // default language to english
+            box2.SelectedItem = "English";
         }
 
         // translate provided text
@@ -72,6 +75,7 @@ namespace TranslationApp
             openFileDialog.Filter = "All files (*.*)|*.*";
             openFileDialog.Multiselect = true;
             if (openFileDialog.ShowDialog() == true)
+
             {
                 // loop through all given files
                 for (int i = 0; i < openFileDialog.FileNames.Length; i++)
@@ -105,7 +109,16 @@ namespace TranslationApp
         //updates file name textbox
         private void DisplayFileName(string name)
         {
-            fileName.Text += name;
+            fileName.Text += name;     
+        }
+
+        private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
+
         }
 
         // triggers application light mode

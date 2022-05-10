@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TranslationApp"
         mc:Ignorable="d"
+
         Title="Word Wise" Height="800" Width="1600" MinHeight="600" MinWidth="600"
         ResizeMode="CanResizeWithGrip"
         x:Name="Main"
@@ -21,30 +22,34 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="1" Grid.Column="0">
-                <TextBox
+            <Grid Grid.Row="1" Grid.Column="0">     
+              
+            <TextBox x:Name="textToTranslate"
+                     Grid.Row="1"
+                     Grid.Column="2"
+
                      BorderThickness="1"
                      VerticalAlignment="Stretch"
                      HorizontalAlignment="Stretch"
-                     x:Name="textToTranslate"
                      TextWrapping="Wrap"
                      VerticalScrollBarVisibility="Hidden"
                      AcceptsReturn="True"
                      FontSize="12"
                      FontFamily="/Fonts/#Roboto"
-                     Grid.Row="1" 
-                     Grid.Column="2" 
                      Margin="50,50,50,50"
                      MinHeight="180"
                      MinWidth="190"
                      BorderBrush="DarkGray"
                      Style="{StaticResource TextBoxStyle}">
-                    <TextBox.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="7" />
-                        </Style>
-                    </TextBox.Resources>
-                </TextBox>
+
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                                Value="7" />
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+
 
                 <TextBlock IsHitTestVisible="False"
                        Text="Detect language"
@@ -55,6 +60,7 @@
                        FontFamily="/Fonts/#Roboto"
                        Foreground="DarkGray"
                        Grid.Column="0">
+
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -66,6 +72,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
+          
                 <TextBox
                 x:Name="fileName"
                 Text="No files chosen."
@@ -91,6 +98,7 @@
                 </TextBox>
             </Grid>
 
+
             <Button 
             Grid.Row="1" 
             Grid.Column="1" 
@@ -100,12 +108,15 @@
             Click="Translate" 
             FontFamily="/Fonts/#Roboto"
             Content="Translate">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="7" />
-                    </Style>
-                </Button.Resources>
-            </Button>
+
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius"
+                            Value="7" />
+                </Style>
+            </Button.Resources>
+        </Button>
+
 
             <Button 
             Name="btnOpenFile" 
@@ -116,12 +127,15 @@
             VerticalAlignment="Top" 
             FontFamily="/Fonts/#Roboto"
             Width="75">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="7"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
+
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius"
+                            Value="7" />
+                </Style>
+            </Button.Resources>
+        </Button>
+
 
             <!--<Button 
             Content="Input Text" 
@@ -149,9 +163,9 @@
             </ComboBox.Resources>
         </ComboBox>-->
 
-
             <ComboBox 
             Name="box2"
+
             Margin="50.333,57,119.667,657.333" 
             Text="English" 
             HorizontalAlignment="Stretch"
@@ -159,6 +173,7 @@
             IsEditable="True"
             IsReadOnly="True" Grid.Column="2" Grid.RowSpan="2">
             </ComboBox>
+
 
             <TextBox 
             Grid.Row="1" 
@@ -171,12 +186,14 @@
             FontFamily="/Fonts/#Roboto"
             Style="{StaticResource TextBoxStyle}"
             IsReadOnly="True">
-                <TextBox.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="7" />
-                    </Style>
-                </TextBox.Resources>
-            </TextBox>
+
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius"
+                            Value="7" />
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
 
             <RadioButton Grid.Row="0"
                      Grid.Column="2"
@@ -200,7 +217,24 @@
                      IsChecked="False"
                      FontFamily="/Fonts/#Roboto"
                      GroupName="modeSelection"
-                     Checked="DarkModeChecked"/>
-        </Grid>
-    </Viewbox>
+                     Checked="DarkModeChecked" />
+
+        <Button x:Name="btnExportTxtFile"
+                Click="btnExportTxtFile_Click"
+                Content="Export to .txt"
+                HorizontalAlignment="Left"
+                Margin="50,249.8,0,0"
+                VerticalAlignment="Top"
+                Width="75"
+                Grid.Column="2"
+                Grid.Row="1">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius"
+                            Value="7" />
+                </Style>
+            </Button.Resources>
+        </Button>
+    </Grid>
+   </Viewbox>
 </Window>
