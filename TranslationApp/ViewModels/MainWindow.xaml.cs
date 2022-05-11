@@ -4,6 +4,7 @@ using System.Windows;
 using System.Collections.Generic;
 using Google.Cloud.Translation.V2;
 using Microsoft.Win32;
+using static TranslationApp.Classes.PdfSharpExtensions;
 
 namespace TranslationApp
 {
@@ -11,9 +12,10 @@ namespace TranslationApp
     {
         private Dictionary<string, string> m_languagesKeys = new Dictionary<string, string>();
         private TranslationClient m_client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
-
         public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
         public TranslationClient Client { get => m_client; }
+
+        string FPATH = "";
 
         public MainWindow()
         {
@@ -74,7 +76,21 @@ namespace TranslationApp
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
-                textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+            {
+                string ext = Path.GetExtension(openFileDialog.FileName);
+                if (ext == ".txt")
+                {
+                    textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                }
+                else if (ext == ".pdf")
+                {
+                    string pdfContents = GetText(openFileDialog.FileName);
+                    textToTranslate.Text = pdfContents;
+                    FPATH = openFileDialog.FileName;
+                }
+                else
+                    textToTranslate.Text = "Current file format is not supported";
+            }
         }
 
         private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
@@ -101,6 +117,26 @@ namespace TranslationApp
 
             //and to save the settings
             Properties.Settings.Default.Save();
+        }
+        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (translatedText.Text == "")
+            {
+                //add error handling 
+            }
+            else
+            {
+                //assume that there is a existing PDF for now
+                if (FPATH != "")
+                {
+                    ExportPDF(FPATH, translatedText.Text);
+                }
+                else
+                {
+                    textToTranslate.Text = "Must be a original PDF for now";
+                }
+
+            }
         }
         #endregion
     }

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TranslationApp": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "api_key ": " AIzaSyCck7BWRpCn7wKT2B7VyrN_BRw6HF7dszA"
+      }
+    }
+  }
+}
