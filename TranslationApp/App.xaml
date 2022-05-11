@@ -10,12 +10,12 @@
             <Style TargetType="{x:Type Button}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Dark">
-                        <Setter Property="Background" Value="#ECB365"/>
+                        <Setter Property="Background" Value="#00897B"/>
                         <Setter Property="Foreground" Value="White"/>
                     </DataTrigger>
 
                     <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Light">
-                        <Setter Property="Background" Value="LightBlue"/>
+                        <Setter Property="Background" Value="#63b6e6"/>
                         <Setter Property="Foreground" Value="White"/>
                     </DataTrigger>
                 </Style.Triggers>
@@ -24,11 +24,11 @@
             <Style TargetType="{x:Type Window}" x:Key="WindowStyle">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Dark">
-                        <Setter Property="Background" Value="#041C32"/>
+                        <Setter Property="Background" Value="#102A43"/>
                     </DataTrigger>
 
                     <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Light">
-                        <Setter Property="Background" Value="LightGray"/>
+                        <Setter Property="Background" Value="#FFFF"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -48,12 +48,12 @@
             <Style TargetType="{x:Type TextBox}" x:Key="TextBoxStyle">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Dark">
-                        <Setter Property="Background" Value="#064663"/>
+                        <Setter Property="Background" Value="#334E68"/>
                         <Setter Property="Foreground" Value="White"/>
                     </DataTrigger>
 
                     <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Light">
-                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="Background" Value="#f0f3f5"/>
                         <Setter Property="Foreground" Value="Black"/>
                     </DataTrigger>
                 </Style.Triggers>
