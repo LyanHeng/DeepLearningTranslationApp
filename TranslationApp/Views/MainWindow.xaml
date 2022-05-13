@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TranslationApp"
         mc:Ignorable="d"
 
-        Title="Word Wise" Height="800" Width="1600" MinHeight="600" MinWidth="600"
+        Title="Word Wise" Height="800" Width="1450" MinHeight="800" MinWidth="1450"
         ResizeMode="CanResizeWithGrip"
         x:Name="Main"
         Style="{StaticResource WindowStyle}">
@@ -14,7 +14,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="650" />
-                <ColumnDefinition Width="275" />
+                <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="650" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -22,44 +22,39 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="1" Grid.Column="0">     
-              
-            <TextBox x:Name="textToTranslate"
-                     Grid.Row="1"
-                     Grid.Column="2"
-
+            <Grid Grid.Row="1" Grid.Column="0">
+                
+                <TextBox x:Name="textToTranslate"
+                     MaxHeight="580"
                      BorderThickness="1"
                      VerticalAlignment="Stretch"
-                     HorizontalAlignment="Stretch"
                      TextWrapping="Wrap"
-                     VerticalScrollBarVisibility="Hidden"
+                     HorizontalAlignment="Stretch"
+                     VerticalScrollBarVisibility="Auto"
                      AcceptsReturn="True"
-                     FontSize="12"
                      FontFamily="/Fonts/#Roboto"
                      Margin="50,50,50,50"
-                     MinHeight="180"
-                     MinWidth="190"
                      BorderBrush="DarkGray"
-                     Style="{StaticResource TextBoxStyle}">
+                     Style="{StaticResource TextBoxStyle}" Grid.ColumnSpan="2">
 
-                <TextBox.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius"
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius"
                                 Value="7" />
-                    </Style>
-                </TextBox.Resources>
-            </TextBox>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
 
 
                 <TextBlock IsHitTestVisible="False"
                        Text="Detect language"
                        VerticalAlignment="Top"
-                       Margin="50,50,50,50"
+                       Margin="50,50,50,0"
                        Padding="3,0,0,0"
                        FontSize="13"
                        FontFamily="/Fonts/#Roboto"
                        Foreground="DarkGray"
-                       Grid.Column="0">
+                       Grid.Column="0" Grid.ColumnSpan="2">
 
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
@@ -72,21 +67,19 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-          
-                <TextBox
+                <!--<TextBox
                 x:Name="fileName"
                 Text="No files chosen."
                 BorderThickness="1"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch"
                 TextWrapping="Wrap"
+                MaxHeight="30"
+                Height="30"
                 VerticalScrollBarVisibility="Hidden"
-                AcceptsReturn="True"
-                FontSize="12"
+                HorizontalScrollBarVisibility="Disabled"
                 FontFamily="/Fonts/#Roboto" 
                 BorderBrush="DarkGray" 
-                Margin="50,-16,49.667,673"
-                IsReadOnly="True">
+                Margin="50,-20,49,670"
+                IsReadOnly="True" Grid.ColumnSpan="2">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="7" />
@@ -95,60 +88,86 @@
                     <TextBox.Style>
                         <StaticResource ResourceKey="TextBoxStyle"/>
                     </TextBox.Style>
-                </TextBox>
+                </TextBox>-->
+
+
+                <ListBox x:Name="fileName"
+                         Margin="50,-40,49,670"
+                         Grid.ColumnSpan="2"
+                         MaxHeight="55"
+                         Height="55"/>
             </Grid>
 
 
             <Button 
             Grid.Row="1" 
             Grid.Column="1" 
-            Margin="75,100" 
             Height="75" 
             Width="120"
             Click="Translate" 
             FontFamily="/Fonts/#Roboto"
             Content="Translate">
 
-            <Button.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius"
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
                             Value="7" />
-                </Style>
-            </Button.Resources>
-        </Button>
+                    </Style>
+                </Button.Resources>
+            </Button>
 
+            <Button 
+            Grid.Row="1" 
+            Grid.Column="0" 
+            Width="75"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Right"
+            Click="Clear" 
+            FontFamily="/Fonts/#Roboto"
+            Content="Clear Text" 
+            Margin="420,21,50,0">
+
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+            </Button>
 
             <Button 
             Name="btnOpenFile" 
             Click="btnOpenFile_Click"
             Content="File" 
             HorizontalAlignment="Left" 
-            Margin="50,28,0,0" 
+            Margin="50,10,0,0" 
             VerticalAlignment="Top" 
             FontFamily="/Fonts/#Roboto"
             Width="75">
 
-            <Button.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius"
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
                             Value="7" />
-                </Style>
-            </Button.Resources>
-        </Button>
+                    </Style>
+                </Button.Resources>
+            </Button>
 
-
-            <!--<Button 
-            Content="Input Text" 
-            HorizontalAlignment="Left" 
-            Margin="40,13,0,0" 
+            <Button 
+            Click="DelItem_Click"
+            Content="Delete Item" 
+            HorizontalAlignment="Right" 
+            Margin="0,10,50,0" 
             VerticalAlignment="Top" 
+            FontFamily="/Fonts/#Roboto"
             Width="75">
-            <Button.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="7"/>
-                </Style>
-            </Button.Resources>
-        </Button>-->
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+            </Button>
 
             <!--<ComboBox 
             Name="box1"
@@ -165,9 +184,10 @@
 
             <ComboBox 
             Name="box2"
-
-            Margin="50.333,57,119.667,657.333" 
+            Height="30"
+            Margin="50.333,56,119.667,600" 
             Text="English" 
+            VerticalAlignment="Top"
             HorizontalAlignment="Stretch"
             FontFamily="/Fonts/#Roboto"
             IsEditable="True"
@@ -182,18 +202,17 @@
             BorderBrush="DarkGray"
             x:Name="translatedText"
             BorderThickness="1"
-            FontSize="12"
             FontFamily="/Fonts/#Roboto"
             Style="{StaticResource TextBoxStyle}"
             IsReadOnly="True">
 
-            <TextBox.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius"
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
                             Value="7" />
-                </Style>
-            </TextBox.Resources>
-        </TextBox>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
 
             <RadioButton Grid.Row="0"
                      Grid.Column="2"
@@ -219,22 +238,22 @@
                      GroupName="modeSelection"
                      Checked="DarkModeChecked" />
 
-        <Button x:Name="btnExportTxtFile"
+            <Button x:Name="btnExportTxtFile"
                 Click="btnExportTxtFile_Click"
                 Content="Export to .txt"
                 HorizontalAlignment="Left"
-                Margin="513.333,644.333,0,0"
-                VerticalAlignment="Top"
-                Width="75"
+                Margin="50,10"
+                VerticalAlignment="Bottom"
+                Width="80"
                 Grid.Column="2"
                 Grid.Row="1">
-            <Button.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius"
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
                             Value="7" />
-                </Style>
-            </Button.Resources>
-        </Button>
-    </Grid>
-   </Viewbox>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </Grid>
+    </Viewbox>
 </Window>
