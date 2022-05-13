@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -7,11 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Roboto-Regular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Fonts\Roboto-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Google.Cloud.Translation.V2" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 
   <ItemGroup>
