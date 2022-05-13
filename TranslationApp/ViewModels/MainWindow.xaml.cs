@@ -92,18 +92,6 @@ namespace TranslationApp
                     //get the current file then read it
                     string file = openFileDialog.FileNames[i];
                     string ext = Path.GetExtension(openFileDialog.FileNames[i]);
-
-                    if (fileName.Text == "No files chosen.")
-                    {
-                        fileName.Text = "";
-                    }
-                    //call to update file textbox
-                    DisplayFileName(file);
-
-                    if (i != openFileDialog.FileNames.Length - 1)
-                    {
-                        fileName.Text += ", ";
-                    }
                     // appends the files text to its current contents
 
                     if (ext == ".txt")
