@@ -82,7 +82,7 @@ namespace TranslationApp
                 {
                     //get the current file then read it
                     string file = openFileDialog.FileNames[i];
-                    string ext = Path.GetExtension(openFileDialog.FileNames[i]);           
+                    string ext = Path.GetExtension(openFileDialog.FileNames[i]);
 
                     if (fileName.Text == "No files chosen.")
                     {
@@ -90,8 +90,8 @@ namespace TranslationApp
                     }
                     //call to update file textbox
                     DisplayFileName(file);
-                    
-                    if(i != openFileDialog.FileNames.Length -1)
+
+                    if (i != openFileDialog.FileNames.Length - 1)
                     {
                         fileName.Text += ", ";
                     }
@@ -118,6 +118,7 @@ namespace TranslationApp
                     fileName.Text = "No files chosen.";
                 }
             }
+        }
 
         //updates file name textbox
         private void DisplayFileName(string name)
