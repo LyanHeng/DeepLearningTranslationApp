@@ -223,7 +223,7 @@
                 Click="btnExportTxtFile_Click"
                 Content="Export to .txt"
                 HorizontalAlignment="Left"
-                Margin="50,249.8,0,0"
+                Margin="513.333,644.333,0,0"
                 VerticalAlignment="Top"
                 Width="75"
                 Grid.Column="2"
