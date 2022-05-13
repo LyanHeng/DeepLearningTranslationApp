@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Google.Cloud.Translation.V2;
 using Microsoft.Win32;
 using static TranslationApp.Classes.PdfSharpExtensions;
+using System.Windows.Controls;
 
 namespace TranslationApp
 {
@@ -65,6 +66,12 @@ namespace TranslationApp
             }
 
         }
+
+        private void Clear(object sender, RoutedEventArgs e)
+        {
+            textToTranslate.Text = String.Empty;
+            fileName.Items.Clear();
+        }
         #endregion
 
         #region Handlers
@@ -77,24 +84,14 @@ namespace TranslationApp
             openFileDialog.Multiselect = true;
             if (openFileDialog.ShowDialog() == true)
             {
+                foreach (string filename in openFileDialog.FileNames)
+                    fileName.Items.Add(Path.GetFullPath(filename));
                 // loop through all given files
                 for (int i = 0; i < openFileDialog.FileNames.Length; i++)
                 {
                     //get the current file then read it
                     string file = openFileDialog.FileNames[i];
                     string ext = Path.GetExtension(openFileDialog.FileNames[i]);
-
-                    if (fileName.Text == "No files chosen.")
-                    {
-                        fileName.Text = "";
-                    }
-                    //call to update file textbox
-                    DisplayFileName(file);
-
-                    if (i != openFileDialog.FileNames.Length - 1)
-                    {
-                        fileName.Text += ", ";
-                    }
                     // appends the files text to its current contents
 
                     if (ext == ".txt")
@@ -112,18 +109,23 @@ namespace TranslationApp
                     else
                         textToTranslate.Text = "Current file format is not supported";
                 }
-
-                if (fileName.Text == "")
-                {
-                    fileName.Text = "No files chosen.";
-                }
             }
         }
 
-        //updates file name textbox
-        private void DisplayFileName(string name)
+        private void DelItem_Click(object sender, RoutedEventArgs e)
         {
-            fileName.Text += name;     
+            if(fileName.SelectedItem != null)
+            {
+                fileName.Items.Remove(fileName.SelectedItem);
+            }
+            textToTranslate.Text = String.Empty;
+            for (int i = 0; i < fileName.Items.Count; i++)
+            {
+                //get the current file then read it
+                ListBoxItem file = (ListBoxItem)fileName.ItemContainerGenerator.ContainerFromIndex(i);
+                string temp = File.ReadAllText(file.Content.ToString());
+                textToTranslate.AppendText(temp);
+            }
         }
 
         private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
