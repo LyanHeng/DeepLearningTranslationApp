@@ -77,6 +77,7 @@ namespace TranslationApp
             openFileDialog.Multiselect = true;
             if (openFileDialog.ShowDialog() == true)
             {
+                // loop through all given files
                 for (int i = 0; i < openFileDialog.FileNames.Length; i++)
                 {
                     //get the current file then read it
@@ -89,12 +90,13 @@ namespace TranslationApp
                     }
                     //call to update file textbox
                     DisplayFileName(file);
-
-                    if (i != openFileDialog.FileNames.Length - 1)
+                    
+                    if(i != openFileDialog.FileNames.Length -1)
                     {
                         fileName.Text += ", ";
                     }
                     // appends the files text to its current contents
+
                     if (ext == ".txt")
                     {
                         //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
@@ -116,11 +118,11 @@ namespace TranslationApp
                     fileName.Text = "No files chosen.";
                 }
             }
-        }
 
+        //updates file name textbox
         private void DisplayFileName(string name)
         {
-            fileName.Text += name;
+            fileName.Text += name;     
         }
 
         private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
@@ -129,6 +131,7 @@ namespace TranslationApp
             saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
             if (saveFileDialog.ShowDialog() == true)
                 File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
+
         }
 
         // triggers application light mode

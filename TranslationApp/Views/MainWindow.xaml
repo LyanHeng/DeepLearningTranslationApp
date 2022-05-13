@@ -22,9 +22,11 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="1" Grid.Column="0">
 
-                <TextBox x:Name="textToTranslate"
+            <Grid Grid.Row="1" Grid.Column="0">     
+              
+            <TextBox x:Name="textToTranslate"
+                     
                      Grid.Row="1"
                      Grid.Column="2"
 
@@ -42,9 +44,11 @@
                      BorderBrush="DarkGray"
                      Style="{StaticResource TextBoxStyle}">
 
-                    <TextBox.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius"
+
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+
                                 Value="7" />
                         </Style>
                     </TextBox.Resources>
@@ -108,10 +112,10 @@
             Click="Translate" 
             FontFamily="/Fonts/#Roboto"
             Content="Translate">
-
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius"
+              
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius"
                             Value="7" />
                     </Style>
                 </Button.Resources>
@@ -128,14 +132,14 @@
             FontFamily="/Fonts/#Roboto"
             Width="75">
 
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius"
+
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius"
                             Value="7" />
                     </Style>
                 </Button.Resources>
             </Button>
-
 
             <!--<Button 
             Content="Input Text" 
@@ -173,7 +177,6 @@
             IsReadOnly="True" Grid.Column="2" Grid.RowSpan="2">
             </ComboBox>
 
-
             <TextBox 
             Grid.Row="1" 
             Grid.Column="2" 
@@ -186,9 +189,10 @@
             Style="{StaticResource TextBoxStyle}"
             IsReadOnly="True">
 
-                <TextBox.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius"
+
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius"
                             Value="7" />
                     </Style>
                 </TextBox.Resources>
@@ -234,6 +238,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
+          
             <Button x:Name="btnExportPDFFile"
                 Click="btnExportPDFFile_Click"
                 Content="Export to .PDF"
@@ -253,3 +258,4 @@
         </Grid>
     </Viewbox>
 </Window>
+
