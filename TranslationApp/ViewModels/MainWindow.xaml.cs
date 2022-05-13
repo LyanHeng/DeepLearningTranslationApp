@@ -9,9 +9,11 @@ namespace TranslationApp
 {
     public partial class MainWindow : Window
     {
+        // fields for text translation
         private Dictionary<string, string> m_languagesKeys = new Dictionary<string, string>();
         private TranslationClient m_client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
 
+        // properties
         public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
         public TranslationClient Client { get => m_client; }
 
@@ -41,8 +43,31 @@ namespace TranslationApp
             box2.SelectedItem = "English";
         }
 
+        private string Translate(string text, string targetLanguage)
+        {
+            string result = "";
+            try
+            {
+                var response = Client.TranslateText(text, LanguageKeys[targetLanguage]);
+                if (response.TranslatedText != null)
+                {
+                    result = response.TranslatedText;
+                }
+                else
+                {
+                    result = "There exists issues with translation.";
+                }
+            }
+            // we typically do not want this to happen, handle as much failure cases as possible
+            catch (Exception exc)
+            {
+                result = "Unexpected Error\n" + exc.Message;
+            }
+            return result;
+        }
+
         // translate provided text
-        private void Translate(object sender, RoutedEventArgs e)
+        private void TranslateText(object sender, RoutedEventArgs e)
         {
             // guard to prevent API character limit
             if (textToTranslate.Text.Length >= 5000)
@@ -51,19 +76,41 @@ namespace TranslationApp
                 return;
             }
 
-            try
+            // translate
+            string translatedResult = Translate(textToTranslate.Text, box2.SelectedItem.ToString());
+            translatedText.Text = translatedResult;
+        }
+
+        // translate into multiple languages
+        private void TranslateToMultiLanguage(object sender, RoutedEventArgs e)
+        {
+            // temporary string array to store multiple arrays
+            // once UI is provided, this will retrieve this from the UI
+
+            string[] targetLanguages = { "Khmer", "French", "Chinese (Simplified)" };
+
+            // temporary storage of translated text in different languages
+            List<string> filePaths = new List<string>();
+
+            // folder handling
+            string translatedFolder = "translated";
+            string pathHeaders = translatedFolder + @"\";
+            Directory.CreateDirectory(translatedFolder);
+
+            // iterate through each language
+            foreach (string language in targetLanguages)
             {
-                var response = Client.TranslateText(textToTranslate.Text, LanguageKeys[box2.SelectedItem.ToString()]);
-                translatedText.Text = response.TranslatedText;
-            }
-            // we typically do not want this to happen, handle as much failure cases as possible
-            catch (Exception exc)
-            {
-                translatedText.Text = "Unexpected Error\n"
-                                    + exc.Message;
+                string translatedResult = Translate(textToTranslate.Text, language);
+
+                // create file
+                string pathToFileToCreate = pathHeaders + language + ".txt";
+                filePaths.Add(pathToFileToCreate);
+                File.WriteAllText(pathToFileToCreate, translatedResult);
             }
 
+            // TODO: Notify the user that it has completed and where to find the files
         }
+
         #endregion
 
         #region Handlers
@@ -109,7 +156,7 @@ namespace TranslationApp
         //updates file name textbox
         private void DisplayFileName(string name)
         {
-            fileName.Text += name;     
+            fileName.Text += name;
         }
 
         private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)

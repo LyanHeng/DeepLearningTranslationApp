@@ -105,7 +105,7 @@
             Margin="75,100" 
             Height="75" 
             Width="120"
-            Click="Translate" 
+            Click="TranslateText" 
             FontFamily="/Fonts/#Roboto"
             Content="Translate">
 
@@ -219,7 +219,7 @@
                      GroupName="modeSelection"
                      Checked="DarkModeChecked" />
 
-        <Button x:Name="btnExportTxtFile"
+            <Button x:Name="btnExportTxtFile"
                 Click="btnExportTxtFile_Click"
                 Content="Export to .txt"
                 HorizontalAlignment="Left"
@@ -228,13 +228,30 @@
                 Width="75"
                 Grid.Column="2"
                 Grid.Row="1">
-            <Button.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius"
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
                             Value="7" />
-                </Style>
-            </Button.Resources>
-        </Button>
-    </Grid>
+                    </Style>
+                </Button.Resources>
+            </Button>
+
+            <Button x:Name="btnMultipleLanguages"
+                Click="TranslateToMultiLanguage"
+                Content="Multi-Lang"
+                HorizontalAlignment="Left"
+                Margin="275,644,0,0"
+                VerticalAlignment="Top"
+                Width="75"
+                Grid.Column="2"
+                Grid.Row="1">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </Grid>
    </Viewbox>
 </Window>
