@@ -238,7 +238,7 @@
                 HorizontalAlignment="Left"
                 Margin="50,10"
                 VerticalAlignment="Bottom"
-                Width="80"
+                Width="100"
                 Grid.Column="2"
                 Grid.Row="1">
                 <Button.Resources>
@@ -253,9 +253,9 @@
                 Click="btnExportPDFFile_Click"
                 Content="Export to .PDF"
                 HorizontalAlignment="Left"
-                Margin="400,644,0,0"
+                Margin="175,655,0,0"
                 VerticalAlignment="Top"
-                Width="75"
+                Width="100"
                 Grid.Column="2"
                 Grid.Row="1">
                 <Button.Resources>
