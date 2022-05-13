@@ -15,7 +15,6 @@ namespace TranslationApp
         public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
         public TranslationClient Client { get => m_client; }
 
-        string FPATH = "";
 
         public MainWindow()
         {
@@ -75,22 +74,53 @@ namespace TranslationApp
             // Create OpenFileDialog
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "All files (*.*)|*.*";
+            openFileDialog.Multiselect = true;
             if (openFileDialog.ShowDialog() == true)
             {
-                string ext = Path.GetExtension(openFileDialog.FileName);
-                if (ext == ".txt")
+                for (int i = 0; i < openFileDialog.FileNames.Length; i++)
                 {
-                    textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                    //get the current file then read it
+                    string file = openFileDialog.FileNames[i];
+                    string ext = Path.GetExtension(openFileDialog.FileNames[i]);           
+
+                    if (fileName.Text == "No files chosen.")
+                    {
+                        fileName.Text = "";
+                    }
+                    //call to update file textbox
+                    DisplayFileName(file);
+
+                    if (i != openFileDialog.FileNames.Length - 1)
+                    {
+                        fileName.Text += ", ";
+                    }
+                    // appends the files text to its current contents
+                    if (ext == ".txt")
+                    {
+                        //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                        string temp = File.ReadAllText(openFileDialog.FileNames[i]);
+                        textToTranslate.AppendText(temp);
+                    }
+                    else if (ext == ".pdf")
+                    {
+                        string pdfContents = GetText(openFileDialog.FileNames[i]);
+                        textToTranslate.AppendText(pdfContents); //= pdfContents;
+                        //FPATH = openFileDialog.FileName;
+                    }
+                    else
+                        textToTranslate.Text = "Current file format is not supported";
                 }
-                else if (ext == ".pdf")
+
+                if (fileName.Text == "")
                 {
-                    string pdfContents = GetText(openFileDialog.FileName);
-                    textToTranslate.Text = pdfContents;
-                    FPATH = openFileDialog.FileName;
+                    fileName.Text = "No files chosen.";
                 }
-                else
-                    textToTranslate.Text = "Current file format is not supported";
             }
+        }
+
+        private void DisplayFileName(string name)
+        {
+            fileName.Text += name;
         }
 
         private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
@@ -122,20 +152,12 @@ namespace TranslationApp
         {
             if (translatedText.Text == "")
             {
-                //add error handling 
+                //add error handling
+                textToTranslate.Text = "Must have text to translate & export first";
             }
             else
             {
-                //assume that there is a existing PDF for now
-                if (FPATH != "")
-                {
-                    ExportPDF(FPATH, translatedText.Text);
-                }
-                else
-                {
-                    textToTranslate.Text = "Must be a original PDF for now";
-                }
-
+                ExportPDF(translatedText.Text);
             }
         }
         #endregion

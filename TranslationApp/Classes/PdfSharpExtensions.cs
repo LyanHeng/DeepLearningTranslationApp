@@ -32,13 +32,14 @@ namespace TranslationApp.Classes
             }
             return divided; //returns list of strings divided by punctuation 
         }
-        public static void ExportPDF(string pdfFileName, string text)
+        public static void ExportPDF(string text)
         {
-            PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
+            //string pdfFileName
+            //PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
             PdfDocument NewDocument = new PdfDocument();
             //create document info 
-            string name = OriginPDF.Info.Title + "_Translated";//not sure about keeping this
-            NewDocument.Info.Title = OriginPDF.Info.Title + "_Translated";
+            //string name = OriginPDF.Info.Title + "_Translated";//not sure about keeping this
+            NewDocument.Info.Title = "a Title";//OriginPDF.Info.Title + "_Translated";
 
 
             //List<string> division = Format(text); -> Disabled for now
