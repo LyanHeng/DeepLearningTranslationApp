@@ -194,12 +194,16 @@
             Grid.Row="1" 
             Grid.Column="2" 
             Margin="50,50,50,50"
+            MaxHeight="580"
+            VerticalAlignment="Stretch"
+            TextWrapping="Wrap"
+            HorizontalAlignment="Stretch"
+            VerticalScrollBarVisibility="Auto"
             BorderBrush="DarkGray"
             x:Name="translatedText"
             BorderThickness="1"
             FontFamily="/Fonts/#Roboto"
             Style="{StaticResource TextBoxStyle}"
-            TextWrapping="Wrap"
             IsReadOnly="True">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
