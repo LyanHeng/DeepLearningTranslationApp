@@ -199,6 +199,7 @@
             BorderThickness="1"
             FontFamily="/Fonts/#Roboto"
             Style="{StaticResource TextBoxStyle}"
+            TextWrapping="Wrap"
             IsReadOnly="True">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
