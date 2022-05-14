@@ -6,6 +6,7 @@ using Google.Cloud.Translation.V2;
 using Microsoft.Win32;
 using static TranslationApp.Classes.PdfSharpExtensions;
 using System.Windows.Controls;
+using System.Text.RegularExpressions;
 
 namespace TranslationApp
 {
@@ -43,20 +44,78 @@ namespace TranslationApp
             box2.SelectedItem = "English";
         }
 
+        public string subStringTranslate(string substring, ref int count)
+        {
+            if (substring.Length < 5000)
+            {
+                var response = Client.TranslateText(substring, LanguageKeys[box2.SelectedItem.ToString()]);
+                return response.TranslatedText;
+            }
+
+            var regex = new Regex(@"((?<=(\.)*(\r\n)+).{20}|(?<=\.(\s)+)).{20}", RegexOptions.Compiled);
+            count++;
+            string newString = "";
+            var file = string.Format(Path.GetTempPath() + "substring_{0}.txt", count);
+
+            List<string> matchList = new List<string>();
+
+            foreach (Match match in regex.Matches(substring))
+            {
+                matchList.Add(match.Value);
+            }
+
+            for (int i = matchList.Count - 1; i > 0; i--)
+            {
+                int positionOfNewline = substring.LastIndexOf(matchList[i]);
+                if (positionOfNewline < 5000)
+                {
+                    var response = Client.TranslateText(substring.Substring(0, positionOfNewline), LanguageKeys[box2.SelectedItem.ToString()]);
+                    newString = response.TranslatedText;
+                    substring = substring.Substring(positionOfNewline, substring.Length - positionOfNewline);
+                    break;
+                }
+            }
+            return newString + subStringTranslate(substring, ref count);
+        }
+
         // translate provided text
         private void Translate(object sender, RoutedEventArgs e)
         {
+            int count = 0;
+            string translatedSubString = "";
+            //positive lookbehind for grabbing the 20 characters after it.
+            var regex = new Regex(@"((?<=(\.)*(\r\n)+).{20}|(?<=\.(\s)+)).{20}", RegexOptions.Compiled);
+
+            string newString = textToTranslate.Text;
             // guard to prevent API character limit
             if (textToTranslate.Text.Length >= 5000)
             {
-                translatedText.Text = "Google API does not support translation above 5000 characters.";
-                return;
+                /*translatedText.Text = "Google API does not support translation above 5000 characters.";
+                return;*/
+
+                List<string> matchList = new List<string>();
+
+                foreach (Match match in regex.Matches(textToTranslate.Text))
+                {
+                    matchList.Add(match.Value);
+                }
+                for (int i = matchList.Count - 1; i > 0; i--)
+                {
+                    int positionOfNewline = textToTranslate.Text.LastIndexOf(matchList[i]);
+                    if (positionOfNewline < 5000)
+                    {
+                        string partAfterNewline = textToTranslate.Text.Substring(positionOfNewline, textToTranslate.Text.Length - positionOfNewline);
+                        translatedSubString = subStringTranslate(partAfterNewline, ref count);
+                        newString = textToTranslate.Text.Substring(0, positionOfNewline);
+                        break;
+                    }
+                }
             }
 
             try
             {
-                var response = Client.TranslateText(textToTranslate.Text, LanguageKeys[box2.SelectedItem.ToString()]);
-                translatedText.Text = response.TranslatedText;
+                var response = Client.TranslateText(newString, LanguageKeys[box2.SelectedItem.ToString()]);
+                translatedText.Text = response.TranslatedText + translatedSubString;
             }
             // we typically do not want this to happen, handle as much failure cases as possible
             catch (Exception exc)
