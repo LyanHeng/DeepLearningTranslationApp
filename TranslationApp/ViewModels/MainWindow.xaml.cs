@@ -84,25 +84,27 @@ namespace TranslationApp
             openFileDialog.Multiselect = true;
             if (openFileDialog.ShowDialog() == true)
             {
-                foreach (string filename in openFileDialog.FileNames)
-                    fileName.Items.Add(Path.GetFullPath(filename));
-                // loop through all given files
-                for (int i = 0; i < openFileDialog.FileNames.Length; i++)
+                foreach (string filePath in openFileDialog.FileNames)
                 {
+                    // in case file is already added - skip loading the file
+                    if (fileName.Items.Contains(filePath)) continue;
+
+                    fileName.Items.Add(Path.GetFullPath(filePath));
+
                     //get the current file then read it
-                    string file = openFileDialog.FileNames[i];
-                    string ext = Path.GetExtension(openFileDialog.FileNames[i]);
+                    string file = filePath;
+                    string ext = Path.GetExtension(filePath);
                     // appends the files text to its current contents
 
                     if (ext == ".txt")
                     {
                         //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
-                        string temp = File.ReadAllText(openFileDialog.FileNames[i]);
+                        string temp = File.ReadAllText(filePath);
                         textToTranslate.AppendText(temp);
                     }
                     else if (ext == ".pdf")
                     {
-                        string pdfContents = GetText(openFileDialog.FileNames[i]);
+                        string pdfContents = GetText(filePath);
                         textToTranslate.AppendText(pdfContents); //= pdfContents;
                         //FPATH = openFileDialog.FileName;
                     }
