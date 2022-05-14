@@ -95,7 +95,14 @@
                          Margin="50,-40,49,670"
                          Grid.ColumnSpan="2"
                          MaxHeight="55"
-                         Height="55"/>
+                         Height="55">
+                    <ListBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius"
+                            Value="7" />
+                        </Style>
+                    </ListBox.Resources>
+                </ListBox>
             </Grid>
 
 
