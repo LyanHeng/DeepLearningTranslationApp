@@ -12,6 +12,7 @@ namespace TranslationApp
 {
     public partial class MainWindow : Window
     {
+
         private Dictionary<string, string> m_languagesKeys = new Dictionary<string, string>();
         private TranslationClient m_client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
         public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
