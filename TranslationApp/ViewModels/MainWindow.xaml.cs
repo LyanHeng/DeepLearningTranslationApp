@@ -4,16 +4,16 @@ using System.Windows;
 using System.Collections.Generic;
 using Google.Cloud.Translation.V2;
 using Microsoft.Win32;
+using static TranslationApp.Classes.PdfSharpExtensions;
+using System.Windows.Controls;
 
 namespace TranslationApp
 {
     public partial class MainWindow : Window
     {
-        private Dictionary<string, string> m_languagesKeys = new Dictionary<string, string>();
-        private TranslationClient m_client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
+        public Dictionary<string, string> LanguageKeys { get; } = new Dictionary<string, string>();
+        public TranslationClient Client => TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
 
-        public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
-        public TranslationClient Client { get => m_client; }
 
         public MainWindow()
         {
@@ -64,6 +64,12 @@ namespace TranslationApp
             }
 
         }
+
+        private void Clear(object sender, RoutedEventArgs e)
+        {
+            textToTranslate.Text = String.Empty;
+            fileName.Items.Clear();
+        }
         #endregion
 
         #region Handlers
@@ -76,39 +82,57 @@ namespace TranslationApp
             openFileDialog.Multiselect = true;
             if (openFileDialog.ShowDialog() == true)
             {
+                foreach (string filename in openFileDialog.FileNames)
+                    fileName.Items.Add(Path.GetFullPath(filename));
                 // loop through all given files
                 for (int i = 0; i < openFileDialog.FileNames.Length; i++)
                 {
                     //get the current file then read it
                     string file = openFileDialog.FileNames[i];
-                    string temp = File.ReadAllText(file);
-
-                    if (fileName.Text == "No files chosen.")
-                    {
-                        fileName.Text = "";
-                    }
-                    //call to update file textbox
-                    DisplayFileName(file);
-
-                    if(i != openFileDialog.FileNames.Length -1)
-                    {
-                        fileName.Text += ", ";
-                    }
+                    string ext = Path.GetExtension(openFileDialog.FileNames[i]);
                     // appends the files text to its current contents
-                    textToTranslate.AppendText(temp);
-                }
 
-                if (fileName.Text == "")
-                {
-                    fileName.Text = "No files chosen.";
+                    if (ext == ".txt")
+                    {
+                        //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                        string temp = File.ReadAllText(openFileDialog.FileNames[i]);
+                        textToTranslate.AppendText(temp);
+                    }
+                    else if (ext == ".pdf")
+                    {
+                        string pdfContents = GetText(openFileDialog.FileNames[i]);
+                        textToTranslate.AppendText(pdfContents); //= pdfContents;
+                        //FPATH = openFileDialog.FileName;
+                    }
+                    else
+                        textToTranslate.Text = "Current file format is not supported";
                 }
             }
-         
         }
-        //updates file name textbox
-        private void DisplayFileName(string name)
+
+        private void DelItem_Click(object sender, RoutedEventArgs e)
         {
-            fileName.Text += name;
+            if(fileName.SelectedItem != null)
+            {
+                fileName.Items.Remove(fileName.SelectedItem);
+            }
+            textToTranslate.Text = String.Empty;
+            for (int i = 0; i < fileName.Items.Count; i++)
+            {
+                //get the current file then read it
+                ListBoxItem file = (ListBoxItem)fileName.ItemContainerGenerator.ContainerFromIndex(i);
+                string temp = File.ReadAllText(file.Content.ToString());
+                textToTranslate.AppendText(temp);
+            }
+        }
+
+        private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
+
         }
 
         // triggers application light mode
@@ -127,6 +151,18 @@ namespace TranslationApp
 
             //and to save the settings
             Properties.Settings.Default.Save();
+        }
+        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (translatedText.Text == "")
+            {
+                //add error handling
+                textToTranslate.Text = "Must have text to translate & export first";
+            }
+            else
+            {
+                ExportPDF(translatedText.Text);
+            }
         }
         #endregion
     }
