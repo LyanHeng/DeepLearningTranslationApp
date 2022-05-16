@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Collections.Generic;
@@ -7,31 +7,27 @@ using Microsoft.Win32;
 using static TranslationApp.Classes.PdfSharpExtensions;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
-using TranslationApp.Views;
+using System.Windows.Navigation;
 
 namespace TranslationApp
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for SingleLanguagePage.xaml
+    /// </summary>
+    public partial class SingleLanguagePage : Page
     {
         private Dictionary<string, string> m_languagesKeys = new Dictionary<string, string>();
         private TranslationClient m_client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
         public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
         public TranslationClient Client { get => m_client; }
 
-        
-
-
-        public MainWindow()
+        public SingleLanguagePage()
         {
             InitializeComponent();
-
             PopulateLanguageComboBoxes();
         }
 
-    
 
-        #region Methods
-        // retrieve all supported languages from Google Service
         private void PopulateLanguageComboBoxes()
         {
             box2.Items.Clear();
@@ -140,25 +136,18 @@ namespace TranslationApp
 
         private void SingleLangButton_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Content = new SingleLanguagePage();
-            //this.Close();
-            //Window win = new Window();
-            //win.ShowDialog();
-
             SingleLanguagePage newPage = new SingleLanguagePage();
             this.Content = newPage;
         }
 
         private void MultiLangButton_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Content = new MultiLanguagesPage();
-
             MultiLanguagesPage newPage = new MultiLanguagesPage();
             this.Content = newPage;
         }
 
 
-        #endregion
+
 
         #region Handlers
         // open file dialog
@@ -202,7 +191,7 @@ namespace TranslationApp
 
         private void DelItem_Click(object sender, RoutedEventArgs e)
         {
-            if(fileName.SelectedItem != null)
+            if (fileName.SelectedItem != null)
             {
                 fileName.Items.Remove(fileName.SelectedItem);
             }
@@ -226,6 +215,19 @@ namespace TranslationApp
         }
 
         // triggers application light mode
+
+        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (translatedText.Text == "")
+            {
+                //add error handling
+                textToTranslate.Text = "Must have text to translate & export first";
+            }
+            else
+            {
+                ExportPDF(translatedText.Text);
+            }
+        }
         private void LightModeChecked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.TranslationApp = "Light";
@@ -242,18 +244,7 @@ namespace TranslationApp
             //and to save the settings
             Properties.Settings.Default.Save();
         }
-        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
-        {
-            if (translatedText.Text == "")
-            {
-                //add error handling
-                textToTranslate.Text = "Must have text to translate & export first";
-            }
-            else
-            {
-                ExportPDF(translatedText.Text);
-            }
-        }
         #endregion
     }
 }
+

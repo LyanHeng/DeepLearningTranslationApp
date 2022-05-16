@@ -1,17 +1,13 @@
-<Window x:Class="TranslationApp.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TranslationApp"
-        mc:Ignorable="d"
+﻿<Page x:Class="TranslationApp.SingleLanguagePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TranslationApp"
+      mc:Ignorable="d" 
 
-        Title="Word Wise" Height="800" Width="1450" MinHeight="800" MinWidth="1450"
-        ResizeMode="CanResizeWithGrip"
-        x:Name="Main"
-        Style="{StaticResource WindowStyle}">
+    Title="Word Wise" Height="800" Width="1450" MinHeight="800" MinWidth="1450">
     <Viewbox>
-        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="650" />
@@ -22,7 +18,9 @@
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <Frame x:Name="MainFrame" 
+
+
+            <Frame x:Name="SingleLanguage" 
                    Grid.RowSpan="2" 
                    HorizontalAlignment="Stretch" 
                    VerticalAlignment="Stretch" 
@@ -30,40 +28,8 @@
                    VerticalContentAlignment="Stretch"  
                    NavigationUIVisibility="Hidden"
                    />
-
-
+            
             <Grid Grid.Row="1" Grid.Column="0">
-
-
-                <Button x:Name="SingleLangButton" 
-                    Click="SingleLangButton_Click" 
-                    Margin="3,655.333,562,0" 
-                    Content="Single" 
-                    Grid.Row="1" 
-                    Height="29" 
-                    VerticalAlignment="Top">
-                        <Button.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius"
-                            Value="7" />
-                            </Style>
-                        </Button.Resources>
-                    </Button>
-                    <Button x:Name="MultiLangButton" 
-                    Click="MultiLangButton_Click" 
-                    Margin="93,655.333,472,0" 
-                    Content="Multiple" 
-                    Grid.Row="1" 
-                    Height="29" 
-                    VerticalAlignment="Top" >
-                        <Button.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius"
-                            Value="7" />
-                            </Style>
-                        </Button.Resources>
-                    </Button>
-              
                 <TextBox x:Name="textToTranslate"
                      MaxHeight="580"
                      BorderThickness="1"
@@ -214,18 +180,7 @@
                 </Button.Resources>
             </Button>
 
-            <!--<ComboBox 
-            Name="box1"
-            Margin="150,20,20,20" 
-            Text="Auto-Detect" 
-            HorizontalAlignment="Stretch"
-            IsEditable="True"
-            IsReadOnly="True"
-            FontFamily="calibri">
-            <ComboBox.Resources>
-            </ComboBox.Resources>
-        </ComboBox>-->
-
+ 
             <ComboBox 
             Name="box2"
             Height="30"
@@ -319,8 +274,34 @@
                 </Button.Resources>
             </Button>
 
-            
-         
+            <Button x:Name="SingleLangButton" 
+                    Click="SingleLangButton_Click" 
+                    Margin="3,655.333,562,0" 
+                    Content="Single" 
+                    Grid.Row="1" 
+                    Height="29" 
+                    VerticalAlignment="Top">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+            </Button>
+            <Button x:Name="MultiLangButton" 
+                    Click="MultiLangButton_Click" 
+                    Margin="93,655.333,472,0" 
+                    Content="Multiple" 
+                    Grid.Row="1" 
+                    Height="29" 
+                    VerticalAlignment="Top" >
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+            </Button>
 
 
 
@@ -329,5 +310,4 @@
 
         </Grid>
     </Viewbox>
-</Window>
-
+</Page>
