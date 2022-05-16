@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Content;
@@ -83,18 +81,17 @@ namespace TranslationApp.Classes
 
         public static string GetText(string pdfFileName)
         {
-            // this could fail if the pdf file is not supported by pdfsharp
-            // TODO: Pipe it through "Print to PDF" here
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo()
+            // this could fail in many cases. There is no perfect way in handling this.
+            PdfDocument OriginPDF = null;
+            try
             {
-                CreateNoWindow = true,
-                Verb = "print",
-                FileName = pdfFileName
-            };
-            p.Start();
-
-            PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
+                OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Given PDF File not supported/invalid\n" + exc.Message);
+                return null;
+            }
             string sentence = "";
             /*
              * Still TODO:

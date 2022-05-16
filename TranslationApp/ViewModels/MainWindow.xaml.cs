@@ -121,8 +121,7 @@ namespace TranslationApp
             // we typically do not want this to happen, handle as much failure cases as possible
             catch (Exception exc)
             {
-                translatedText.Text = "Unexpected Error\n"
-                                    + exc.Message;
+                MessageBox.Show("Unexpected Error\n" + exc.Message);
             }
 
         }
@@ -165,7 +164,15 @@ namespace TranslationApp
                     else if (ext == ".pdf")
                     {
                         string pdfContents = GetText(filePath);
-                        textToTranslate.AppendText(pdfContents); //= pdfContents;
+                        if (pdfContents == null)
+                        {
+                            fileName.Items.Remove(filePath);
+                            return;
+                        }
+                        else
+                        {
+                            textToTranslate.AppendText(pdfContents);
+                        }
                         //FPATH = openFileDialog.FileName;
                     }
                     else
