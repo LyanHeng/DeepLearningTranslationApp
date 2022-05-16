@@ -128,6 +128,36 @@ namespace TranslationApp
             textToTranslate.Text = String.Empty;
             fileName.Items.Clear();
         }
+
+        // Read from a file with different file extension and print into text box
+        private void ReadFromFile(string filePath)
+        {
+            //get the current file then read it
+            string ext = Path.GetExtension(filePath);
+
+            // appends the files text to its current contents
+            if (ext == ".txt")
+            {
+                //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                string temp = File.ReadAllText(filePath);
+                textToTranslate.AppendText(temp);
+            }
+            else if (ext == ".pdf")
+            {
+                string pdfContents = GetText(filePath);
+                if (pdfContents == null)
+                {
+                    fileName.Items.Remove(filePath);
+                    return;
+                }
+                else
+                {
+                    textToTranslate.AppendText(pdfContents);
+                }
+            }
+            else
+                textToTranslate.Text = "Current file format is not supported";
+        }
         #endregion
 
         #region Handlers
@@ -147,33 +177,7 @@ namespace TranslationApp
 
                     fileName.Items.Add(Path.GetFullPath(filePath));
 
-                    //get the current file then read it
-                    string file = filePath;
-                    string ext = Path.GetExtension(filePath);
-                    // appends the files text to its current contents
-
-                    if (ext == ".txt")
-                    {
-                        //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
-                        string temp = File.ReadAllText(filePath);
-                        textToTranslate.AppendText(temp);
-                    }
-                    else if (ext == ".pdf")
-                    {
-                        string pdfContents = GetText(filePath);
-                        if (pdfContents == null)
-                        {
-                            fileName.Items.Remove(filePath);
-                            return;
-                        }
-                        else
-                        {
-                            textToTranslate.AppendText(pdfContents);
-                        }
-                        //FPATH = openFileDialog.FileName;
-                    }
-                    else
-                        textToTranslate.Text = "Current file format is not supported";
+                    ReadFromFile(filePath);
                 }
             }
         }
@@ -189,8 +193,7 @@ namespace TranslationApp
             {
                 //get the current file then read it
                 ListBoxItem file = (ListBoxItem)fileName.ItemContainerGenerator.ContainerFromIndex(i);
-                string temp = File.ReadAllText(file.Content.ToString());
-                textToTranslate.AppendText(temp);
+                ReadFromFile(file.Content.ToString());
             }
         }
 
