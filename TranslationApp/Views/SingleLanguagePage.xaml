@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:TranslationApp"
       mc:Ignorable="d" 
 
-    Title="Word Wise" Height="800" Width="1450" MinHeight="800" MinWidth="1450">
+    Title="Word Wise"   
+      Style="{StaticResource PageStyle}">
     <Viewbox>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -18,17 +19,14 @@
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-
-
-            <Frame x:Name="SingleLanguage" 
+            <Frame x:Name="SingleLanguages" 
                    Grid.RowSpan="2" 
                    HorizontalAlignment="Stretch" 
                    VerticalAlignment="Stretch" 
                    HorizontalContentAlignment="Stretch" 
                    VerticalContentAlignment="Stretch"  
-                   NavigationUIVisibility="Hidden"
-                   />
-            
+                   NavigationUIVisibility="Hidden"/>
+
             <Grid Grid.Row="1" Grid.Column="0">
                 <TextBox x:Name="textToTranslate"
                      MaxHeight="580"
@@ -42,7 +40,6 @@
                      Margin="50,50,50,50"
                      BorderBrush="DarkGray"
                      Style="{StaticResource TextBoxStyle}" Grid.ColumnSpan="2">
-
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius"
@@ -50,7 +47,6 @@
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-
 
                 <TextBlock IsHitTestVisible="False"
                        Text="Detect language"
@@ -61,7 +57,6 @@
                        FontFamily="/Fonts/#Roboto"
                        Foreground="DarkGray"
                        Grid.Column="0" Grid.ColumnSpan="2">
-
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -97,7 +92,6 @@
                     </TextBox.Style>
                 </TextBox>-->
 
-
                 <ListBox x:Name="fileName"
                          Margin="50,-40,49,670"
                          Grid.ColumnSpan="2"
@@ -111,7 +105,6 @@
                     </ListBox.Resources>
                 </ListBox>
             </Grid>
-
 
             <Button 
             Grid.Row="1" 
@@ -180,7 +173,6 @@
                 </Button.Resources>
             </Button>
 
- 
             <ComboBox 
             Name="box2"
             Height="30"
@@ -276,11 +268,13 @@
 
             <Button x:Name="SingleLangButton" 
                     Click="SingleLangButton_Click" 
-                    Margin="3,655.333,562,0" 
                     Content="Single" 
+                    HorizontalAlignment="Left"
+                    Margin="50,10"
+                    VerticalAlignment="Bottom"
+                    Width="100"
                     Grid.Row="1" 
-                    Height="29" 
-                    VerticalAlignment="Top">
+                    >
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
@@ -290,11 +284,12 @@
             </Button>
             <Button x:Name="MultiLangButton" 
                     Click="MultiLangButton_Click" 
-                    Margin="93,655.333,472,0" 
-                    Content="Multiple" 
-                    Grid.Row="1" 
-                    Height="29" 
-                    VerticalAlignment="Top" >
+                    Content="Multiple"                 
+                    HorizontalAlignment="Left"
+                    Margin="160,50,10,10"
+                    VerticalAlignment="Bottom"
+                    Width="100"
+                    Grid.Row="1">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
@@ -302,12 +297,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
-
-
-
-
-
-
+           
         </Grid>
     </Viewbox>
 </Page>

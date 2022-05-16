@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TranslationApp"
       mc:Ignorable="d" 
-      Title="MultiLanguagesPage" Height="800" Width="1450" MinHeight="800" MinWidth="1450">
+      Title="MultiLanguagesPage" 
+       Style="{StaticResource PageStyle}">
 
     <Viewbox>
         <Grid>
@@ -18,16 +19,13 @@
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-
             <Frame x:Name="MultipleLanguages" 
                    Grid.RowSpan="2" 
                    HorizontalAlignment="Stretch" 
                    VerticalAlignment="Stretch" 
                    HorizontalContentAlignment="Stretch" 
                    VerticalContentAlignment="Stretch"  
-                   NavigationUIVisibility="Hidden"
-                   />
-
+                   NavigationUIVisibility="Hidden"/>
 
             <Grid Grid.Row="1" Grid.Column="0">
                 <TextBox x:Name="textToTranslate"
@@ -42,7 +40,6 @@
                      Margin="50,50,50,50"
                      BorderBrush="DarkGray"
                      Style="{StaticResource TextBoxStyle}" Grid.ColumnSpan="2">
-
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius"
@@ -60,7 +57,6 @@
                        FontFamily="/Fonts/#Roboto"
                        Foreground="DarkGray"
                        Grid.Column="0">
-
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -72,6 +68,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
+
                 <ListBox x:Name="fileName"
                          Margin="50,-40,49,670"
                          Grid.ColumnSpan="2"
@@ -85,7 +82,6 @@
                     </ListBox.Resources>
                 </ListBox>
             </Grid>
-
 
             <Button 
             Grid.Row="1" 
@@ -102,6 +98,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
+            
             <Button 
             Grid.Row="1" 
             Grid.Column="0" 
@@ -119,6 +116,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
+            
             <Button 
             Name="btnOpenFile" 
             Click="btnOpenFile_Click"
@@ -135,6 +133,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
+            
             <Button 
             Click="DelItem_Click"
             Content="Delete Item" 
@@ -151,7 +150,6 @@
                 </Button.Resources>
             </Button>
 
-
             <ComboBox 
             Name="box2"
             Height="30"
@@ -162,8 +160,9 @@
             FontFamily="/Fonts/#Roboto"
             IsEditable="True"
             IsReadOnly="True" 
-            Grid.Column="2" Grid.Row="1"/>
-
+            Grid.Column="2" Grid.Row="1">
+                
+            </ComboBox>
 
             <TextBox 
             Grid.Row="1" 
@@ -197,7 +196,6 @@
                        FontFamily="/Fonts/#Roboto"
                        Foreground="DarkGray"
                        Grid.Column="2" Grid.Row="1">
-
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
@@ -233,9 +231,41 @@
                      FontFamily="/Fonts/#Roboto"
                      GroupName="modeSelection"
                      Checked="DarkModeChecked" />
-            <Button x:Name="SingleLangButton" Click="SingleLangButton_Click" Margin="4,636.333,561,0" Content="Single" Grid.Row="1" Height="29" VerticalAlignment="Top" />
+            
+            
+            <Button x:Name="SingleLangButton"                   
+                    Content="Single" 
+                    Click="SingleLangButton_Click" 
+                    HorizontalAlignment="Left"
+                    Margin="50,10"
+                    VerticalAlignment="Bottom"
+                    Width="100"
+                    Grid.Row="1" >
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+            </Button>
+            
+            <Button x:Name="MultiLangButton" 
+                    Click="MultiLangButton_Click" 
+                    Content="Multiple" 
+                    HorizontalAlignment="Left"
+                    Margin="160,50,10,10"
+                    VerticalAlignment="Bottom"
+                    Width="100"
+                    Grid.Row="1">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+            </Button>
 
-
+           
         </Grid>
     </Viewbox>
 </Page>

@@ -9,7 +9,7 @@
         Title="Word Wise" Height="800" Width="1450" MinHeight="800" MinWidth="1450"
         ResizeMode="CanResizeWithGrip"
         x:Name="Main"
-        Style="{StaticResource WindowStyle}">
+        >
     <Viewbox>
         
         <Grid>

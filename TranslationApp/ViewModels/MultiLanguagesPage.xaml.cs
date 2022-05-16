@@ -125,7 +125,6 @@ namespace TranslationApp
                 translatedText.Text = "Unexpected Error\n"
                                     + exc.Message;
             }
-
         }
 
         private void Clear(object sender, RoutedEventArgs e)
@@ -136,23 +135,16 @@ namespace TranslationApp
 
         private void SingleLangButton_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Content = new SingleLanguagePage();
-            //this.Close();
-            //Window win = new Window();
-            //win.ShowDialog();
-
-            SingleLanguagePage newPage = new SingleLanguagePage();
-            this.Content = newPage;
+            NavigationService nav = NavigationService.GetNavigationService(this);
+            nav.Navigate(new Uri("./Views/SingleLanguagePage.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void MultiLangButton_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Content = new MultiLanguagesPage();
-
-            MultiLanguagesPage newPage = new MultiLanguagesPage();
-            this.Content = newPage;
+       
+            NavigationService nav = NavigationService.GetNavigationService(this);
+            nav.Navigate(new Uri("./Views/MultiLanguagesPage.xaml", UriKind.RelativeOrAbsolute));
         }
-
 
 
 
@@ -218,7 +210,6 @@ namespace TranslationApp
             saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
             if (saveFileDialog.ShowDialog() == true)
                 File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
-
         }
 
         // triggers application light mode
