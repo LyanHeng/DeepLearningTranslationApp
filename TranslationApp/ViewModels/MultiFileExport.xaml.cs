@@ -1,4 +1,4 @@
-﻿using Google.Cloud.Translation.V2;
+using Google.Cloud.Translation.V2;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -55,39 +55,48 @@ namespace TranslationApp.Views
 
         private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
-            if (saveFileDialog.ShowDialog() == true)
+            if(popup.SelectedIndex == -1)
             {
-                string ext = System.IO.Path.GetExtension(popup.SelectedItem.ToString());
-                // appends the files text to its current contents
+                MessageBox.Show("Please select an Item first!");
+            }
+            else
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string ext = System.IO.Path.GetExtension(popup.SelectedItem.ToString());
+                    // appends the files text to its current contents
 
-                if (ext == ".txt")
-                {
-                    //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
-                    string temp = File.ReadAllText(popup.SelectedItem.ToString());
-                    var response = Client.TranslateText(temp, LanguageKeys[_language]);
-                    File.WriteAllText(saveFileDialog.FileName, response.TranslatedText);
-                }
-                else if (ext == ".pdf")
-                {
-                    string pdfContents = GetText(popup.SelectedItem.ToString());
-                    var response = Client.TranslateText(pdfContents, LanguageKeys[_language]);
-                    File.WriteAllText(saveFileDialog.FileName, response.TranslatedText);
+                    if (ext == ".txt")
+                    {
+                        //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                        string temp = File.ReadAllText(popup.SelectedItem.ToString());
+                        var response = Client.TranslateText(temp, LanguageKeys[_language]);
+                        File.WriteAllText(saveFileDialog.FileName, response.TranslatedText);
+                    }
+                    else if (ext == ".pdf")
+                    {
+                        string pdfContents = GetText(popup.SelectedItem.ToString());
+                        var response = Client.TranslateText(pdfContents, LanguageKeys[_language]);
+                        File.WriteAllText(saveFileDialog.FileName, response.TranslatedText);
+                    }
                 }
             }
         }
 
         private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
         {
-            if (popup.SelectedItem.ToString() == "")
+            if (popup.SelectedIndex == -1)
             {
-                
+                MessageBox.Show("Please select an Item first!");
             }
-            else
-            {
-                ExportPDF(popup.SelectedItem.ToString());
-            }
+            else 
+            { 
+                ListBoxItem file = (ListBoxItem)popup.ItemContainerGenerator.ContainerFromItem(popup.SelectedItem);
+                var response = Client.TranslateText(File.ReadAllText(file.Content.ToString()), LanguageKeys[_language]);
+                ExportPDF(response.TranslatedText);
+            }   
         }
     }
 }
