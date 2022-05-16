@@ -80,8 +80,20 @@ namespace TranslationApp.Classes
             Process.Start(filename);
 
         }
+
         public static string GetText(string pdfFileName)
         {
+            // this could fail if the pdf file is not supported by pdfsharp
+            // TODO: Pipe it through "Print to PDF" here
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo()
+            {
+                CreateNoWindow = true,
+                Verb = "print",
+                FileName = pdfFileName
+            };
+            p.Start();
+
             PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
             string sentence = "";
             /*
