@@ -45,7 +45,7 @@ namespace TranslationApp
             box2.SelectedItem = "English";
         }
 
-        public string subStringTranslate(string substring, ref int count)
+        public string subStringTranslate(string substring)
         {
             if (substring.Length < 5000)
             {
@@ -54,9 +54,7 @@ namespace TranslationApp
             }
 
             var regex = new Regex(@"((?<=(\.)*(\r\n)+).{20}|(?<=\.(\s)+)).{20}", RegexOptions.Compiled);
-            count++;
             string newString = "";
-            var file = string.Format(Path.GetTempPath() + "substring_{0}.txt", count);
 
             List<string> matchList = new List<string>();
 
@@ -76,13 +74,12 @@ namespace TranslationApp
                     break;
                 }
             }
-            return newString + subStringTranslate(substring, ref count);
+            return newString + subStringTranslate(substring);
         }
 
         // translate provided text
         private void Translate(object sender, RoutedEventArgs e)
         {
-            int count = 0;
             string translatedSubString = "";
             //positive lookbehind for grabbing the 20 characters after it.
             var regex = new Regex(@"((?<=(\.)*(\r\n)+).{20}|(?<=\.(\s)+)).{20}", RegexOptions.Compiled);
@@ -106,7 +103,7 @@ namespace TranslationApp
                     if (positionOfNewline < 5000)
                     {
                         string partAfterNewline = textToTranslate.Text.Substring(positionOfNewline, textToTranslate.Text.Length - positionOfNewline);
-                        translatedSubString = subStringTranslate(partAfterNewline, ref count);
+                        translatedSubString = subStringTranslate(partAfterNewline);
                         newString = textToTranslate.Text.Substring(0, positionOfNewline);
                         break;
                     }
