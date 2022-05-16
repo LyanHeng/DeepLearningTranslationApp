@@ -96,7 +96,14 @@
                          Grid.ColumnSpan="2"
                          MaxHeight="55"
                          Height="55"
-                         SelectionMode="Extended"/>
+                         SelectionMode="Extended">
+                    <ListBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius"
+                            Value="7" />
+                        </Style>
+                    </ListBox.Resources>
+                </ListBox>
             </Grid>
 
 

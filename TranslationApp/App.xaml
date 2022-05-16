@@ -59,6 +59,20 @@
                 </Style.Triggers>
             </Style>
 
+            <Style TargetType="{x:Type ListBox}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Dark">
+                        <Setter Property="Background" Value="#334E68"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Light">
+                        <Setter Property="Background" Value="#f0f3f5"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            
             <Style TargetType="{x:Type RadioButton}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=TranslationApp}" Value="Dark">
