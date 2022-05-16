@@ -200,11 +200,13 @@ namespace TranslationApp
         private void btnExportMultiFile_Click(object sender, RoutedEventArgs e)
         {
             //open popup window
-            if (fileName.Items != null)
+            if (fileName.Items.Count != 0)
             {
                 MultiFileExport window = new MultiFileExport(fileName, box2.SelectedItem.ToString());
                 window.ShowDialog();
             }
+            else
+                MessageBox.Show("Please add files first!");
         }
 
         // triggers application light mode
