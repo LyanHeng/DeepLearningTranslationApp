@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using static TranslationApp.Classes.PdfSharpExtensions;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
+using TranslationApp.Views;
 
 namespace TranslationApp
 {
@@ -17,7 +18,6 @@ namespace TranslationApp
         private TranslationClient m_client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
         public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
         public TranslationClient Client { get => m_client; }
-
 
         public MainWindow()
         {
@@ -114,6 +114,7 @@ namespace TranslationApp
             {
                 var response = Client.TranslateText(newString, LanguageKeys[box2.SelectedItem.ToString()]);
                 translatedText.Text = response.TranslatedText + translatedSubString;
+
             }
             // we typically do not want this to happen, handle as much failure cases as possible
             catch (Exception exc)
@@ -204,6 +205,18 @@ namespace TranslationApp
             if (saveFileDialog.ShowDialog() == true)
                 File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
 
+        }
+
+        private void btnExportMultiFile_Click(object sender, RoutedEventArgs e)
+        {
+            //open popup window
+            if (fileName.Items.Count != 0)
+            {
+                MultiFileExport window = new MultiFileExport(fileName, box2.SelectedItem.ToString());
+                window.ShowDialog();
+            }
+            else
+                MessageBox.Show("Please add files first!");
         }
 
         // triggers application light mode
