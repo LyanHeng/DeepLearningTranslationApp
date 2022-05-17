@@ -66,11 +66,9 @@ namespace TranslationApp.Views
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     string ext = System.IO.Path.GetExtension(popup.SelectedItem.ToString());
-                    // appends the files text to its current contents
 
                     if (ext == ".txt")
                     {
-                        //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
                         string temp = File.ReadAllText(popup.SelectedItem.ToString());
                         var response = Client.TranslateText(temp, LanguageKeys[_language]);
                         File.WriteAllText(saveFileDialog.FileName, response.TranslatedText);
@@ -92,10 +90,21 @@ namespace TranslationApp.Views
                 MessageBox.Show("Please select an Item first!");
             }
             else 
-            { 
-                ListBoxItem file = (ListBoxItem)popup.ItemContainerGenerator.ContainerFromItem(popup.SelectedItem);
-                var response = Client.TranslateText(File.ReadAllText(file.Content.ToString()), LanguageKeys[_language]);
-                ExportPDF(response.TranslatedText);
+            {
+                string ext = System.IO.Path.GetExtension(popup.SelectedItem.ToString());
+
+                if (ext == ".txt")
+                {
+                    ListBoxItem file = (ListBoxItem)popup.ItemContainerGenerator.ContainerFromItem(popup.SelectedItem);
+                    var response = Client.TranslateText(File.ReadAllText(file.Content.ToString()), LanguageKeys[_language]);
+                    ExportPDF(response.TranslatedText);
+                }
+                else if (ext == ".pdf")
+                {
+                    string pdfContents = GetText(popup.SelectedItem.ToString());
+                    var response = Client.TranslateText(pdfContents, LanguageKeys[_language]);
+                    ExportPDF(response.TranslatedText);
+                }
             }   
         }
     }
