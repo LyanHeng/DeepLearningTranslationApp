@@ -25,8 +25,6 @@ namespace TranslationApp
             PopulateLanguageComboBoxes();
         }
 
-    
-
         #region Methods
         // retrieve all supported languages from Google Service
         private void PopulateLanguageComboBoxes()

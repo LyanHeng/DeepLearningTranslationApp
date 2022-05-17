@@ -8,6 +8,7 @@ using static TranslationApp.Classes.PdfSharpExtensions;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
 using System.Windows.Navigation;
+using TranslationApp.Views;
 
 namespace TranslationApp
 {
@@ -206,6 +207,18 @@ namespace TranslationApp
             saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
             if (saveFileDialog.ShowDialog() == true)
                 File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
+        }
+
+        private void btnExportMultiFile_Click(object sender, RoutedEventArgs e)
+        {
+            //open popup window
+            if (fileName.Items.Count != 0)
+            {
+                MultiFileExport window = new MultiFileExport(fileName, box2.SelectedItem.ToString());
+                window.ShowDialog();
+            }
+            else
+                MessageBox.Show("Please add files first!");
         }
 
         // triggers application light mode

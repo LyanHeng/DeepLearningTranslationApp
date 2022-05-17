@@ -265,6 +265,23 @@
                     </Style>
                 </Button.Resources>
             </Button>
+            
+            <Button x:Name="btnExportToMultiFile"
+                Click="btnExportMultiFile_Click"
+                Content="Export files"
+                HorizontalAlignment="Left"
+                Margin="300,655,0,0"
+                VerticalAlignment="Top"
+                Width="100"
+                Grid.Column="2"
+                Grid.Row="1">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+            </Button>
 
             <Button x:Name="SingleLangButton" 
                     Click="SingleLangButton_Click" 
