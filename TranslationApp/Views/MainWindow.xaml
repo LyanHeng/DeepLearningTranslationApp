@@ -90,7 +90,7 @@
                        Text="Detect language"
                        VerticalAlignment="Top"
                        Margin="50,50,50,0"
-                       Padding="3,0,0,0"
+                       Padding="3,4,0,0"
                        FontSize="13"
                        FontFamily="/Fonts/#Roboto"
                        Foreground="DarkGray"
@@ -136,7 +136,8 @@
                          Margin="50,-40,49,670"
                          Grid.ColumnSpan="2"
                          MaxHeight="55"
-                         Height="55">
+                         Height="55"
+                         SelectionMode="Extended">
                     <ListBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius"
@@ -287,11 +288,11 @@
 
             <Button x:Name="btnExportTxtFile"
                 Click="btnExportTxtFile_Click"
-                Content="Export to .txt"
+                Content="Export output to .txt"
                 HorizontalAlignment="Left"
                 Margin="50,10"
                 VerticalAlignment="Bottom"
-                Width="100"
+                Width="120"
                 Grid.Column="2"
                 Grid.Row="1">
                 <Button.Resources>
@@ -304,11 +305,28 @@
 
             <Button x:Name="btnExportPDFFile"
                 Click="btnExportPDFFile_Click"
-                Content="Export to .PDF"
+                Content="Export output to .PDF"
                 HorizontalAlignment="Left"
-                Margin="175,655,0,0"
+                Margin="204,655,0,0"
                 VerticalAlignment="Top"
-                Width="100"
+                Width="125"
+                Grid.Column="2"
+                Grid.Row="1">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+            </Button>
+
+            <Button x:Name="btnExportToMultiFile"
+                Click="btnExportMultiFile_Click"
+                Content="Export files"
+                HorizontalAlignment="Left"
+                Margin="364,655,0,0"
+                VerticalAlignment="Top"
+                Width="125"
                 Grid.Column="2"
                 Grid.Row="1">
                 <Button.Resources>
@@ -330,4 +348,3 @@
         </Grid>
     </Viewbox>
 </Window>
-
