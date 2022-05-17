@@ -21,36 +21,43 @@ namespace TranslationApp
         public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
         public TranslationClient Client { get => m_client; }
 
+        
+
         public MultiLanguagesPage()
         {
             InitializeComponent();
-            PopulateLanguageComboBoxes();
+            PopulateLanguageCbComboBoxes();
         }
 
-
-        private void PopulateLanguageComboBoxes()
+     
+        private void PopulateLanguageCbComboBoxes()
         {
-            box2.Items.Clear();
+            multiLangSelect.Items.Clear();
             // get all supported language by Google
             // "en" - defines the language of all the names of the languages
             IList<Language> supportedLanguages = Client.ListLanguages("en");
+
             foreach (Language language in supportedLanguages)
             {
                 if (!LanguageKeys.ContainsKey(language.Name))
                 {
                     LanguageKeys.Add(language.Name, language.Code);
-                    box2.Items.Add(language.Name);
                 }
+                CheckBox chkbox = new CheckBox();
+                
+                chkbox.Content = language.Name;
+                
+                multiLangSelect.Items.Add(chkbox);              
             }
             // default language to english
-            box2.SelectedItem = "English";
+            multiLangSelect.SelectedItem = "English";
         }
 
         public string subStringTranslate(string substring, ref int count)
         {
             if (substring.Length < 5000)
             {
-                var response = Client.TranslateText(substring, LanguageKeys[box2.SelectedItem.ToString()]);
+                var response = Client.TranslateText(substring, LanguageKeys[multiLangSelect.SelectedItem.ToString()]);
                 return response.TranslatedText;
             }
 
@@ -71,7 +78,7 @@ namespace TranslationApp
                 int positionOfNewline = substring.LastIndexOf(matchList[i]);
                 if (positionOfNewline < 5000)
                 {
-                    var response = Client.TranslateText(substring.Substring(0, positionOfNewline), LanguageKeys[box2.SelectedItem.ToString()]);
+                    var response = Client.TranslateText(substring.Substring(0, positionOfNewline), LanguageKeys[multiLangSelect.SelectedItem.ToString()]);
                     newString = response.TranslatedText;
                     substring = substring.Substring(positionOfNewline, substring.Length - positionOfNewline);
                     break;
@@ -114,17 +121,17 @@ namespace TranslationApp
                 }
             }
 
-            try
-            {
-                var response = Client.TranslateText(newString, LanguageKeys[box2.SelectedItem.ToString()]);
-                translatedText.Text = response.TranslatedText + translatedSubString;
-            }
-            // we typically do not want this to happen, handle as much failure cases as possible
-            catch (Exception exc)
-            {
-                translatedText.Text = "Unexpected Error\n"
-                                    + exc.Message;
-            }
+            //try
+            //{
+            //    var response = Client.TranslateText(newString, LanguageKeys[multiLangSelect.SelectedItem.ToString()]);
+            //    translatedText.Text = response.TranslatedText + translatedSubString;
+            //}
+            //// we typically do not want this to happen, handle as much failure cases as possible
+            //catch (Exception exc)
+            //{
+            //    translatedText.Text = "Unexpected Error\n"
+            //                        + exc.Message;
+            //}
         }
 
         private void Clear(object sender, RoutedEventArgs e)
@@ -146,7 +153,18 @@ namespace TranslationApp
             nav.Navigate(new Uri("./Views/MultiLanguagesPage.xaml", UriKind.RelativeOrAbsolute));
         }
 
-
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (CheckBox chkbox in multiLangSelect.Items )
+            {
+                if (chkbox.IsChecked == true)
+                {
+                    selectedLanguagesBox.Text += chkbox.Content;
+                    selectedLanguagesBox.Text += ", ";
+                    chkbox.IsChecked = false;
+                }
+            }
+        }
 
         #region Handlers
         // open file dialog
@@ -204,28 +222,28 @@ namespace TranslationApp
             }
         }
 
-        private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
-            if (saveFileDialog.ShowDialog() == true)
-                File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
-        }
+        //private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
+        //{
+        //    SaveFileDialog saveFileDialog = new SaveFileDialog();
+        //    saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
+        //    if (saveFileDialog.ShowDialog() == true)
+        //        File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
+        //}
 
         // triggers application light mode
 
-        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
-        {
-            if (translatedText.Text == "")
-            {
-                //add error handling
-                textToTranslate.Text = "Must have text to translate & export first";
-            }
-            else
-            {
-                ExportPDF(translatedText.Text);
-            }
-        }
+        //private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (translatedText.Text == "")
+        //    {
+        //        //add error handling
+        //        textToTranslate.Text = "Must have text to translate & export first";
+        //    }
+        //    else
+        //    {
+        //        ExportPDF(translatedText.Text);
+        //    }
+        //}
         private void LightModeChecked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.TranslationApp = "Light";
