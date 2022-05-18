@@ -13,5 +13,9 @@ namespace TranslationApp
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+
+        }
     }
 }
