@@ -223,15 +223,19 @@ namespace TranslationApp
             openFileDialog.Multiselect = true;
             if (openFileDialog.ShowDialog() == true)
             {
-                foreach (string filePath in openFileDialog.FileNames)
+                string filePath = openFileDialog.FileNames[0];
+                // in case file is already added - skip loading the file
+                if (fileName.Items.Contains(filePath)) return;
+                // this feature should only allow one file to be loaded
+                if (fileName.Items.Count > 0)
                 {
-                    // in case file is already added - skip loading the file
-                    if (fileName.Items.Contains(filePath)) continue;
-
-                    fileName.Items.Add(Path.GetFullPath(filePath));
-
-                    ReadFromFile(filePath);
+                    fileName.Items.Clear();
+                    textToTranslate.Text = "";
                 }
+
+                fileName.Items.Add(Path.GetFullPath(filePath));
+
+                ReadFromFile(filePath);
             }
         }
 

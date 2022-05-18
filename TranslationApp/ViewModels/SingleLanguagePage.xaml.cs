@@ -163,6 +163,8 @@ namespace TranslationApp
                 }
                 else
                 {
+                    // line separation formatting
+                    if (textToTranslate.Text.Length > 0) textToTranslate.AppendText("\n\n");
                     textToTranslate.AppendText(pdfContents);
                 }
             }
