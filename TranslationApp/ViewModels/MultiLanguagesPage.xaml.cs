@@ -144,7 +144,7 @@ namespace TranslationApp
 
             // Notify the user that it has completed and where to find the files
             string absolutePath = new Uri(Directory.GetCurrentDirectory() + @"\..\..\..\" + folderName).AbsoluteUri;
-            fileTranslationStatusBox.Text = "Files can be found at\n" + absolutePath;
+            fileTranslationStatusBox.Text = "Files can be found at\n\n" + absolutePath;
             fileTranslationStatusBox.Visibility = Visibility.Visible;
         }
 
