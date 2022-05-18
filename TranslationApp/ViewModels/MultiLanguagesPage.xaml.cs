@@ -21,15 +21,13 @@ namespace TranslationApp
         public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
         public TranslationClient Client { get => m_client; }
 
-        
-
         public MultiLanguagesPage()
         {
             InitializeComponent();
             PopulateLanguageCbComboBoxes();
         }
 
-     
+        // populate the combo boxes with check box functionality
         private void PopulateLanguageCbComboBoxes()
         {
             multiLangSelect.Items.Clear();
@@ -120,18 +118,6 @@ namespace TranslationApp
                     }
                 }
             }
-
-            //try
-            //{
-            //    var response = Client.TranslateText(newString, LanguageKeys[multiLangSelect.SelectedItem.ToString()]);
-            //    translatedText.Text = response.TranslatedText + translatedSubString;
-            //}
-            //// we typically do not want this to happen, handle as much failure cases as possible
-            //catch (Exception exc)
-            //{
-            //    translatedText.Text = "Unexpected Error\n"
-            //                        + exc.Message;
-            //}
         }
 
         private void Clear(object sender, RoutedEventArgs e)
@@ -222,28 +208,6 @@ namespace TranslationApp
             }
         }
 
-        //private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
-        //{
-        //    SaveFileDialog saveFileDialog = new SaveFileDialog();
-        //    saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
-        //    if (saveFileDialog.ShowDialog() == true)
-        //        File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
-        //}
-
-        // triggers application light mode
-
-        //private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (translatedText.Text == "")
-        //    {
-        //        //add error handling
-        //        textToTranslate.Text = "Must have text to translate & export first";
-        //    }
-        //    else
-        //    {
-        //        ExportPDF(translatedText.Text);
-        //    }
-        //}
         private void LightModeChecked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.TranslationApp = "Light";

@@ -222,7 +222,6 @@ namespace TranslationApp
         }
 
         // triggers application light mode
-
         private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
         {
             if (translatedText.Text == "")
@@ -235,6 +234,7 @@ namespace TranslationApp
                 ExportPDF(translatedText.Text);
             }
         }
+
         private void LightModeChecked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.TranslationApp = "Light";
