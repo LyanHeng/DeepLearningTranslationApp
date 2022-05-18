@@ -111,7 +111,7 @@
             Grid.Column="1" 
             Height="75" 
             Width="120"
-            Click="Translate" 
+            Click="TranslateText" 
             FontFamily="/Fonts/#Roboto"
             Content="Translate">
                 <Button.Resources>

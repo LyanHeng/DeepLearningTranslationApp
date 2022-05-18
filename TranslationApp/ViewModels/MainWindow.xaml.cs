@@ -24,7 +24,6 @@ namespace TranslationApp
         public MainWindow()
         {
             InitializeComponent();
-
             PopulateLanguageComboBoxes();
         }
 

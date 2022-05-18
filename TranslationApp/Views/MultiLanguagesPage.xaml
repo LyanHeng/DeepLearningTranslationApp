@@ -88,7 +88,7 @@
             Grid.Column="2" 
             Height="75" 
             Width="120"
-            Click="Translate" 
+            Click="TranslateToMultiLanguage" 
             FontFamily="/Fonts/#Roboto"
             Content="Translate and Export">
                 <Button.Resources>
@@ -305,7 +305,32 @@
                     </Style>
                 </Button.Resources>
             </Button>
-
+            <TextBox
+                Visibility="Hidden"
+                Grid.Row="1" 
+                Grid.Column="2" 
+                Margin="205,447,195,249"
+                MaxHeight="580"
+                Width="250"
+                VerticalAlignment="Stretch"
+                TextWrapping="Wrap"
+                HorizontalAlignment="Stretch"
+                VerticalScrollBarVisibility="Auto"
+                BorderBrush="DarkGray"
+                x:Name="fileTranslationStatusBox"
+                BorderThickness="1"
+                FontFamily="/Fonts/#Roboto"
+                IsReadOnly="True">
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <StaticResource ResourceKey="TextBoxStyle"/>
+                </TextBox.Style>
+            </TextBox>
         </Grid>
     </Viewbox>
 </Page>
