@@ -17,14 +17,13 @@ namespace TranslationApp
     /// </summary>
     public partial class SingleLanguagePage : Page
     {
-        
-
         public SingleLanguagePage()
         {
             InitializeComponent();
             PopulateLanguageComboBoxes();
         }
 
+        #region Methods
         // populate the check boxes for language selection
         private void PopulateLanguageComboBoxes()
         {
@@ -44,6 +43,7 @@ namespace TranslationApp
             box2.SelectedItem = "English";
         }
 
+        // translate a given text provided a given languages
         private string Translate(string text, string targetLanguage)
         {
             string result = "";
@@ -67,7 +67,8 @@ namespace TranslationApp
             return result;
         }
 
-        public string subStringTranslate(string substring)
+        // translate a substring to handle the 5000 characters limit
+        public string SubStringTranslate(string substring)
         {
             if (substring.Length < 5000)
             {
@@ -96,48 +97,10 @@ namespace TranslationApp
                     break;
                 }
             }
-            return newString + subStringTranslate(substring);
+            return newString + SubStringTranslate(substring);
         }
 
-        // translate provided text
-        private void TranslateText(object sender, RoutedEventArgs e)
-        {
-            string translatedSubString = "";
-            //positive lookbehind for grabbing the 20 characters after it.
-            var regex = new Regex(@"((?<=(\.)*(\r\n)+).{20}|(?<=\.(\s)+)).{20}", RegexOptions.Compiled);
-
-            string newString = textToTranslate.Text;
-            // guard to prevent API character limit
-            if (textToTranslate.Text.Length >= 5000)
-            {
-                /*translatedText.Text = "Google API does not support translation above 5000 characters.";
-                return;*/
-
-                List<string> matchList = new List<string>();
-
-                foreach (Match match in regex.Matches(textToTranslate.Text))
-                {
-                    matchList.Add(match.Value);
-                }
-                for (int i = matchList.Count - 1; i > 0; i--)
-                {
-                    int positionOfNewline = textToTranslate.Text.LastIndexOf(matchList[i]);
-                    if (positionOfNewline < 5000)
-                    {
-                        string partAfterNewline = textToTranslate.Text.Substring(positionOfNewline, textToTranslate.Text.Length - positionOfNewline);
-                        translatedSubString = subStringTranslate(partAfterNewline);
-                        newString = textToTranslate.Text.Substring(0, positionOfNewline);
-                        break;
-                    }
-                }
-            }
-
-            // translate
-            string translatedResult = Translate(textToTranslate.Text, box2.SelectedItem.ToString());
-            translatedText.Text = translatedResult;
-        }
-
-        // Read from a file with different file extension and print into text box
+        // read from a file with different file extension and print into text box
         private void ReadFromFile(string filePath)
         {
             //get the current file then read it
@@ -168,26 +131,55 @@ namespace TranslationApp
             else
                 textToTranslate.Text = "Current file format is not supported";
         }
+        #endregion
 
+
+        #region Handlers
+        // translate provided text
+        private void TranslateText(object sender, RoutedEventArgs e)
+        {
+            string translatedSubString = "";
+            //positive lookbehind for grabbing the 20 characters after it.
+            var regex = new Regex(@"((?<=(\.)*(\r\n)+).{20}|(?<=\.(\s)+)).{20}", RegexOptions.Compiled);
+
+            string newString = textToTranslate.Text;
+            // guard to prevent API character limit
+            if (textToTranslate.Text.Length >= 5000)
+            {
+                /*translatedText.Text = "Google API does not support translation above 5000 characters.";
+                return;*/
+
+                List<string> matchList = new List<string>();
+
+                foreach (Match match in regex.Matches(textToTranslate.Text))
+                {
+                    matchList.Add(match.Value);
+                }
+                for (int i = matchList.Count - 1; i > 0; i--)
+                {
+                    int positionOfNewline = textToTranslate.Text.LastIndexOf(matchList[i]);
+                    if (positionOfNewline < 5000)
+                    {
+                        string partAfterNewline = textToTranslate.Text.Substring(positionOfNewline, textToTranslate.Text.Length - positionOfNewline);
+                        translatedSubString = SubStringTranslate(partAfterNewline);
+                        newString = textToTranslate.Text.Substring(0, positionOfNewline);
+                        break;
+                    }
+                }
+            }
+
+            // translate
+            string translatedResult = Translate(textToTranslate.Text, box2.SelectedItem.ToString());
+            translatedText.Text = translatedResult;
+        }
+
+        // clear filename textbox
         private void Clear(object sender, RoutedEventArgs e)
         {
             textToTranslate.Text = String.Empty;
             fileName.Items.Clear();
         }
 
-        private void SingleLangButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService nav = NavigationService.GetNavigationService(this);
-            nav.Navigate(new Uri("./Views/SingleLanguagePage.xaml", UriKind.RelativeOrAbsolute));
-        }
-
-        private void MultiLangButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService nav = NavigationService.GetNavigationService(this);
-            nav.Navigate(new Uri("./Views/MultiLanguagesPage.xaml", UriKind.RelativeOrAbsolute));
-        }
-
-        #region Handlers
         // open file dialog
         private void btnOpenFile_Click(object sender, RoutedEventArgs e)
         {
@@ -209,6 +201,7 @@ namespace TranslationApp
             }
         }
 
+        // delete selected file
         private void DelItem_Click(object sender, RoutedEventArgs e)
         {
             if (fileName.SelectedItem != null)
@@ -224,6 +217,7 @@ namespace TranslationApp
             }
         }
 
+        // handler to export to txt file
         private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -232,6 +226,7 @@ namespace TranslationApp
                 File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
         }
 
+        // handler to export to multiple files
         private void btnExportMultiFile_Click(object sender, RoutedEventArgs e)
         {
             //open popup window
@@ -258,6 +253,7 @@ namespace TranslationApp
             }
         }
 
+        // triggers application light mode
         private void LightModeChecked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.TranslationApp = "Light";
@@ -273,6 +269,20 @@ namespace TranslationApp
 
             //and to save the settings
             Properties.Settings.Default.Save();
+        }
+
+        // triggers single page
+        private void SingleLangButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService nav = NavigationService.GetNavigationService(this);
+            nav.Navigate(new Uri("./Views/SingleLanguagePage.xaml", UriKind.RelativeOrAbsolute));
+        }
+
+        // triggers multi page
+        private void MultiLangButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService nav = NavigationService.GetNavigationService(this);
+            nav.Navigate(new Uri("./Views/MultiLanguagesPage.xaml", UriKind.RelativeOrAbsolute));
         }
         #endregion
     }

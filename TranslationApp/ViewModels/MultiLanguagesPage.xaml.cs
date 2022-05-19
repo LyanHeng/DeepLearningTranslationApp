@@ -22,6 +22,7 @@ namespace TranslationApp
             PopulateLanguageCbComboBoxes();
         }
 
+        #region Methods
         // populate the combo boxes with check box functionality
         private void PopulateLanguageCbComboBoxes()
         {
@@ -46,6 +47,7 @@ namespace TranslationApp
             multiLangSelect.SelectedItem = "English";
         }
 
+        // translate a given text given 
         private string Translate(string text, string targetLanguage)
         {
             string result = "";
@@ -69,7 +71,8 @@ namespace TranslationApp
             return result;
         }
 
-        public string subStringTranslate(string substring)
+        // translate a substring to handle the 5000 words limit
+        public string SubStringTranslate(string substring)
         {
             if (substring.Length < 5000)
             {
@@ -98,7 +101,115 @@ namespace TranslationApp
                     break;
                 }
             }
-            return newString + subStringTranslate(substring);
+            return newString + SubStringTranslate(substring);
+        }
+
+        // Read from a file with different file extension and print into text box
+        private void ReadFromFile(string filePath)
+        {
+            //get the current file then read it
+            string ext = Path.GetExtension(filePath);
+
+            // appends the files text to its current contents
+            if (ext == ".txt")
+            {
+                //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                string temp = File.ReadAllText(filePath);
+                textToTranslate.AppendText(temp);
+                fileTranslationStatusBox.Visibility = Visibility.Hidden;
+            }
+            else if (ext == ".pdf")
+            {
+                string pdfContents = GetText(filePath);
+                if (pdfContents == null)
+                {
+                    fileName.Items.Remove(filePath);
+                    return;
+                }
+                else
+                {
+                    textToTranslate.AppendText(pdfContents);
+                    fileTranslationStatusBox.Visibility = Visibility.Hidden;
+                }
+            }
+            else
+                textToTranslate.Text = "Current file format is not supported";
+        }
+        #endregion
+
+        #region Handlers
+        // open file dialog
+        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            // Create OpenFileDialog
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "All files (*.*)|*.*";
+            openFileDialog.Multiselect = true;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileNames[0];
+                // in case file is already added - skip loading the file
+                if (fileName.Items.Contains(filePath)) return;
+                // this feature should only allow one file to be loaded
+                if (fileName.Items.Count > 0)
+                {
+                    fileName.Items.Clear();
+                    textToTranslate.Text = "";
+                }
+
+                fileName.Items.Add(Path.GetFullPath(filePath));
+
+                ReadFromFile(filePath);
+            }
+        }
+
+        // delete selected file
+        private void DelItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (fileName.SelectedItem != null)
+            {
+                fileName.Items.Remove(fileName.SelectedItem);
+            }
+            textToTranslate.Text = String.Empty;
+            for (int i = 0; i < fileName.Items.Count; i++)
+            {
+                //get the current file then read it
+                ListBoxItem file = (ListBoxItem)fileName.ItemContainerGenerator.ContainerFromIndex(i);
+                ReadFromFile(file.Content.ToString());
+            }
+        }
+
+        // triggers application light mode
+        private void LightModeChecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.TranslationApp = "Light";
+
+            //and to save the settings
+            Properties.Settings.Default.Save();
+        }
+
+        // triggers application dark mode
+        private void DarkModeChecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.TranslationApp = "Dark";
+
+            //and to save the settings
+            Properties.Settings.Default.Save();
+        }
+
+        // add language to text box when language selection changes
+        private void SelectionChecked(object sender, RoutedEventArgs e)
+        {
+            selectedLanguagesBox.Text = "";
+            foreach (CheckBox chkbox in multiLangSelect.Items)
+            {
+                if (chkbox.IsChecked == true)
+                {
+                    if (selectedLanguagesBox.Text.Length != 0)
+                        selectedLanguagesBox.Text += "\n";
+                    selectedLanguagesBox.Text += chkbox.Content;
+                }
+            }
         }
 
         // translate into multiple languages
@@ -143,135 +254,35 @@ namespace TranslationApp
             fileTranslationStatusBox.Visibility = Visibility.Visible;
         }
 
+        // clear text box
         private void Clear(object sender, RoutedEventArgs e)
         {
             textToTranslate.Text = String.Empty;
             fileName.Items.Clear();
         }
 
+        // triggers single page
         private void SingleLangButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService nav = NavigationService.GetNavigationService(this);
             nav.Navigate(new Uri("./Views/SingleLanguagePage.xaml", UriKind.RelativeOrAbsolute));
         }
 
+        // triggers multi page
         private void MultiLangButton_Click(object sender, RoutedEventArgs e)
         {
-       
+
             NavigationService nav = NavigationService.GetNavigationService(this);
             nav.Navigate(new Uri("./Views/MultiLanguagesPage.xaml", UriKind.RelativeOrAbsolute));
         }
 
+        // clear languages list and selection box
         private void ClearList(object sender, RoutedEventArgs e)
         {
             selectedLanguagesBox.Text = "";
             foreach (CheckBox chkbox in multiLangSelect.Items)
             {
                 chkbox.IsChecked = false;
-            }
-        }
-
-        // Read from a file with different file extension and print into text box
-        private void ReadFromFile(string filePath)
-        {
-            //get the current file then read it
-            string ext = Path.GetExtension(filePath);
-
-            // appends the files text to its current contents
-            if (ext == ".txt")
-            {
-                //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
-                string temp = File.ReadAllText(filePath);
-                textToTranslate.AppendText(temp);
-                fileTranslationStatusBox.Visibility = Visibility.Hidden;
-            }
-            else if (ext == ".pdf")
-            {
-                string pdfContents = GetText(filePath);
-                if (pdfContents == null)
-                {
-                    fileName.Items.Remove(filePath);
-                    return;
-                }
-                else
-                {
-                    textToTranslate.AppendText(pdfContents);
-                    fileTranslationStatusBox.Visibility = Visibility.Hidden;
-                }
-            }
-            else
-                textToTranslate.Text = "Current file format is not supported";
-        }
-
-        #region Handlers
-        // open file dialog
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
-        {
-            // Create OpenFileDialog
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "All files (*.*)|*.*";
-            openFileDialog.Multiselect = true;
-            if (openFileDialog.ShowDialog() == true)
-            {
-                string filePath = openFileDialog.FileNames[0];
-                // in case file is already added - skip loading the file
-                if (fileName.Items.Contains(filePath)) return;
-                // this feature should only allow one file to be loaded
-                if (fileName.Items.Count > 0)
-                {
-                    fileName.Items.Clear();
-                    textToTranslate.Text = "";
-                }
-
-                fileName.Items.Add(Path.GetFullPath(filePath));
-
-                ReadFromFile(filePath);
-            }
-        }
-
-        private void DelItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (fileName.SelectedItem != null)
-            {
-                fileName.Items.Remove(fileName.SelectedItem);
-            }
-            textToTranslate.Text = String.Empty;
-            for (int i = 0; i < fileName.Items.Count; i++)
-            {
-                //get the current file then read it
-                ListBoxItem file = (ListBoxItem)fileName.ItemContainerGenerator.ContainerFromIndex(i);
-                ReadFromFile(file.Content.ToString());
-            }
-        }
-
-        private void LightModeChecked(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.TranslationApp = "Light";
-
-            //and to save the settings
-            Properties.Settings.Default.Save();
-        }
-
-        // triggers application dark mode
-        private void DarkModeChecked(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.TranslationApp = "Dark";
-
-            //and to save the settings
-            Properties.Settings.Default.Save();
-        }
-
-        private void SelectionChecked(object sender, RoutedEventArgs e)
-        {
-            selectedLanguagesBox.Text = "";
-            foreach (CheckBox chkbox in multiLangSelect.Items)
-            {
-                if (chkbox.IsChecked == true)
-                {
-                    if (selectedLanguagesBox.Text.Length != 0)
-                        selectedLanguagesBox.Text += "\n";
-                    selectedLanguagesBox.Text += chkbox.Content;
-                }
             }
         }
         #endregion
