@@ -29,19 +29,14 @@ namespace TranslationApp
             multiLangSelect.Items.Clear();
             // get all supported language by Google
             // "en" - defines the language of all the names of the languages
-            IList<Language> supportedLanguages = App.Client.ListLanguages("en");
 
-            foreach (Language language in supportedLanguages)
+            foreach (string language in App.LanguageKeys.Keys)
             {
-                if (!App.LanguageKeys.ContainsKey(language.Name))
-                {
-                    App.LanguageKeys.Add(language.Name, language.Code);
-                }
                 CheckBox chkbox = new CheckBox();
-                chkbox.Content = language.Name;
+                chkbox.Content = language;
                 chkbox.Checked += new RoutedEventHandler(SelectionChecked);
                 chkbox.Unchecked += new RoutedEventHandler(SelectionChecked);
-                multiLangSelect.Items.Add(chkbox);              
+                multiLangSelect.Items.Add(chkbox);
             }
             // default language to english
             multiLangSelect.SelectedItem = "English";

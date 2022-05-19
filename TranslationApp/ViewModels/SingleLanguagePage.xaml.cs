@@ -30,14 +30,9 @@ namespace TranslationApp
             box2.Items.Clear();
             // get all supported language by Google
             // "en" - defines the language of all the names of the languages
-            IList<Language> supportedLanguages = App.Client.ListLanguages("en");
-            foreach (Language language in supportedLanguages)
+            foreach (string language in App.LanguageKeys.Keys)
             {
-                if (!App.LanguageKeys.ContainsKey(language.Name))
-                {
-                    App.LanguageKeys.Add(language.Name, language.Code);
-                    box2.Items.Add(language.Name);
-                }
+                box2.Items.Add(language);
             }
             // default language to english
             box2.SelectedItem = "English";
