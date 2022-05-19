@@ -17,10 +17,7 @@ namespace TranslationApp
     /// </summary>
     public partial class SingleLanguagePage : Page
     {
-        private Dictionary<string, string> m_languagesKeys = new Dictionary<string, string>();
-        private TranslationClient m_client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
-        public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
-        public TranslationClient Client { get => m_client; }
+        
 
         public SingleLanguagePage()
         {
@@ -34,12 +31,12 @@ namespace TranslationApp
             box2.Items.Clear();
             // get all supported language by Google
             // "en" - defines the language of all the names of the languages
-            IList<Language> supportedLanguages = Client.ListLanguages("en");
+            IList<Language> supportedLanguages = App.Client.ListLanguages("en");
             foreach (Language language in supportedLanguages)
             {
-                if (!LanguageKeys.ContainsKey(language.Name))
+                if (!App.LanguageKeys.ContainsKey(language.Name))
                 {
-                    LanguageKeys.Add(language.Name, language.Code);
+                    App.LanguageKeys.Add(language.Name, language.Code);
                     box2.Items.Add(language.Name);
                 }
             }
@@ -52,7 +49,7 @@ namespace TranslationApp
             string result = "";
             try
             {
-                var response = Client.TranslateText(text, LanguageKeys[targetLanguage]);
+                var response = App.Client.TranslateText(text, App.LanguageKeys[targetLanguage]);
                 if (response.TranslatedText != null)
                 {
                     result = response.TranslatedText;
@@ -74,7 +71,7 @@ namespace TranslationApp
         {
             if (substring.Length < 5000)
             {
-                var response = Client.TranslateText(substring, LanguageKeys[box2.SelectedItem.ToString()]);
+                var response = App.Client.TranslateText(substring, App.LanguageKeys[box2.SelectedItem.ToString()]);
                 return response.TranslatedText;
             }
 
@@ -93,7 +90,7 @@ namespace TranslationApp
                 int positionOfNewline = substring.LastIndexOf(matchList[i]);
                 if (positionOfNewline < 5000)
                 {
-                    var response = Client.TranslateText(substring.Substring(0, positionOfNewline), LanguageKeys[box2.SelectedItem.ToString()]);
+                    var response = App.Client.TranslateText(substring.Substring(0, positionOfNewline), App.LanguageKeys[box2.SelectedItem.ToString()]);
                     newString = response.TranslatedText;
                     substring = substring.Substring(positionOfNewline, substring.Length - positionOfNewline);
                     break;
