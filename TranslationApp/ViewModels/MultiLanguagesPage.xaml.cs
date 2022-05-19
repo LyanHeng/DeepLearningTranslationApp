@@ -37,9 +37,9 @@ namespace TranslationApp
                     App.LanguageKeys.Add(language.Name, language.Code);
                 }
                 CheckBox chkbox = new CheckBox();
-                
                 chkbox.Content = language.Name;
-                
+                chkbox.Checked += new RoutedEventHandler(SelectionChecked);
+                chkbox.Unchecked += new RoutedEventHandler(SelectionChecked);
                 multiLangSelect.Items.Add(chkbox);              
             }
             // default language to english
@@ -162,17 +162,12 @@ namespace TranslationApp
             nav.Navigate(new Uri("./Views/MultiLanguagesPage.xaml", UriKind.RelativeOrAbsolute));
         }
 
-        private void Add_Click(object sender, RoutedEventArgs e)
+        private void ClearList(object sender, RoutedEventArgs e)
         {
-            foreach (CheckBox chkbox in multiLangSelect.Items )
+            selectedLanguagesBox.Text = "";
+            foreach (CheckBox chkbox in multiLangSelect.Items)
             {
-                if (chkbox.IsChecked == true)
-                {
-                    if (selectedLanguagesBox.Text.Length != 0)
-                        selectedLanguagesBox.Text += "\n";
-                    selectedLanguagesBox.Text += chkbox.Content;
-                    chkbox.IsChecked = false;
-                }
+                chkbox.IsChecked = false;
             }
         }
 
@@ -264,6 +259,20 @@ namespace TranslationApp
 
             //and to save the settings
             Properties.Settings.Default.Save();
+        }
+
+        private void SelectionChecked(object sender, RoutedEventArgs e)
+        {
+            selectedLanguagesBox.Text = "";
+            foreach (CheckBox chkbox in multiLangSelect.Items)
+            {
+                if (chkbox.IsChecked == true)
+                {
+                    if (selectedLanguagesBox.Text.Length != 0)
+                        selectedLanguagesBox.Text += "\n";
+                    selectedLanguagesBox.Text += chkbox.Content;
+                }
+            }
         }
         #endregion
     }
