@@ -135,11 +135,48 @@ namespace TranslationApp
             else
                 textToTranslate.Text = "Current file format is not supported";
         }
+
+        private string TranslateWithSubString(string text, string targetLanguage)
+        {
+            string translatedSubString = "";
+            //positive lookbehind for grabbing the 20 characters after it.
+            var regex = new Regex(@"((?<=(\.)*(\r\n)+).{20}|(?<=\.(\s)+)).{20}", RegexOptions.Compiled);
+
+            string newString = textToTranslate.Text;
+            // guard to prevent API character limit
+            if (textToTranslate.Text.Length >= 5000)
+            {
+                /*translatedText.Text = "Google API does not support translation above 5000 characters.";
+                return;*/
+
+                List<string> matchList = new List<string>();
+
+                foreach (Match match in regex.Matches(textToTranslate.Text))
+                {
+                    matchList.Add(match.Value);
+                }
+                for (int i = matchList.Count - 1; i > 0; i--)
+                {
+                    int positionOfNewline = textToTranslate.Text.LastIndexOf(matchList[i]);
+                    if (positionOfNewline < 5000)
+                    {
+                        string partAfterNewline = textToTranslate.Text.Substring(positionOfNewline, textToTranslate.Text.Length - positionOfNewline);
+                        translatedSubString = SubStringTranslate(partAfterNewline);
+                        newString = textToTranslate.Text.Substring(0, positionOfNewline);
+                        break;
+                    }
+                }
+            }
+
+            // translate
+            string translatedResult = Translate(text, targetLanguage);
+            return translatedResult;
+        }
         #endregion
 
         #region Handlers
         // open file dialog
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -240,7 +277,7 @@ namespace TranslationApp
             // iterate through each language
             foreach (string language in targetLanguages)
             {
-                string translatedResult = Translate(textToTranslate.Text, language);
+                string translatedResult = TranslateWithSubString(textToTranslate.Text, language);
 
                 // create file
                 string pathToFileToCreate = translatedFolder + @"\" + language + ".txt";
@@ -259,6 +296,8 @@ namespace TranslationApp
         {
             textToTranslate.Text = String.Empty;
             fileName.Items.Clear();
+            fileTranslationStatusBox.Text = "";
+            fileTranslationStatusBox.Visibility = Visibility.Hidden;
         }
 
         // triggers single page

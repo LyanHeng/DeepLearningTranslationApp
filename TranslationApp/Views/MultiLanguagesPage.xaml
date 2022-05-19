@@ -119,7 +119,7 @@
 
             <Button 
             Name="btnOpenFile" 
-            Click="btnOpenFile_Click"
+            Click="OpenFile_Click"
             Content="File" 
             HorizontalAlignment="Left" 
             Margin="50,10,0,0" 

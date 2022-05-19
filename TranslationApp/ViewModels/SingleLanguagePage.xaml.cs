@@ -181,7 +181,7 @@ namespace TranslationApp
         }
 
         // open file dialog
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -218,7 +218,7 @@ namespace TranslationApp
         }
 
         // handler to export to txt file
-        private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
+        private void ExportTxtFile_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
@@ -227,7 +227,7 @@ namespace TranslationApp
         }
 
         // handler to export to multiple files
-        private void btnExportMultiFile_Click(object sender, RoutedEventArgs e)
+        private void ExportMultiFile_Click(object sender, RoutedEventArgs e)
         {
             //open popup window
             if (fileName.Items.Count != 0)
@@ -240,12 +240,12 @@ namespace TranslationApp
         }
 
         // triggers application light mode
-        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
+        private void ExportPDFFile_Click(object sender, RoutedEventArgs e)
         {
             if (translatedText.Text == "")
             {
                 //add error handling
-                textToTranslate.Text = "Must have text to translate & export first";
+                MessageBox.Show("Must have text to translate & export first");
             }
             else
             {
