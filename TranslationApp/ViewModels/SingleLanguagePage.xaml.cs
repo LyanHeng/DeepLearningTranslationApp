@@ -20,7 +20,7 @@ namespace TranslationApp
         public SingleLanguagePage()
         {
             InitializeComponent();
-            PopulateLanguageComboBoxes();
+            PopulateLanguageComboBoxes(); 
         }
 
         #region Methods

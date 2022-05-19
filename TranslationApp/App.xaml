@@ -86,6 +86,21 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+
+            <Style TargetType="{x:Type NavigationWindow}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type NavigationWindow}">
+
+                            <AdornerDecorator>
+                                <ContentPresenter Name="PART_NavWinCP" 
+                              ClipToBounds="true"/>
+                            </AdornerDecorator>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
