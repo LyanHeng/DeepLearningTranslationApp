@@ -28,6 +28,7 @@ namespace TranslationApp
             PopulateLanguageComboBoxes();
         }
 
+        // populate the check boxes for language selection
         private void PopulateLanguageComboBoxes()
         {
             box2.Items.Clear();
@@ -46,7 +47,30 @@ namespace TranslationApp
             box2.SelectedItem = "English";
         }
 
-        public string subStringTranslate(string substring, ref int count)
+        private string Translate(string text, string targetLanguage)
+        {
+            string result = "";
+            try
+            {
+                var response = Client.TranslateText(text, LanguageKeys[targetLanguage]);
+                if (response.TranslatedText != null)
+                {
+                    result = response.TranslatedText;
+                }
+                else
+                {
+                    result = "There exists issues with translation.";
+                }
+            }
+            // we typically do not want this to happen, handle as much failure cases as possible
+            catch (Exception exc)
+            {
+                result = "Unexpected Error\n" + exc.Message;
+            }
+            return result;
+        }
+
+        public string subStringTranslate(string substring)
         {
             if (substring.Length < 5000)
             {
@@ -55,9 +79,7 @@ namespace TranslationApp
             }
 
             var regex = new Regex(@"((?<=(\.)*(\r\n)+).{20}|(?<=\.(\s)+)).{20}", RegexOptions.Compiled);
-            count++;
             string newString = "";
-            var file = string.Format(Path.GetTempPath() + "substring_{0}.txt", count);
 
             List<string> matchList = new List<string>();
 
@@ -77,13 +99,12 @@ namespace TranslationApp
                     break;
                 }
             }
-            return newString + subStringTranslate(substring, ref count);
+            return newString + subStringTranslate(substring);
         }
 
         // translate provided text
-        private void Translate(object sender, RoutedEventArgs e)
+        private void TranslateText(object sender, RoutedEventArgs e)
         {
-            int count = 0;
             string translatedSubString = "";
             //positive lookbehind for grabbing the 20 characters after it.
             var regex = new Regex(@"((?<=(\.)*(\r\n)+).{20}|(?<=\.(\s)+)).{20}", RegexOptions.Compiled);
@@ -107,24 +128,48 @@ namespace TranslationApp
                     if (positionOfNewline < 5000)
                     {
                         string partAfterNewline = textToTranslate.Text.Substring(positionOfNewline, textToTranslate.Text.Length - positionOfNewline);
-                        translatedSubString = subStringTranslate(partAfterNewline, ref count);
+                        translatedSubString = subStringTranslate(partAfterNewline);
                         newString = textToTranslate.Text.Substring(0, positionOfNewline);
                         break;
                     }
                 }
             }
 
-            try
+            // translate
+            string translatedResult = Translate(textToTranslate.Text, box2.SelectedItem.ToString());
+            translatedText.Text = translatedResult;
+        }
+
+        // Read from a file with different file extension and print into text box
+        private void ReadFromFile(string filePath)
+        {
+            //get the current file then read it
+            string ext = Path.GetExtension(filePath);
+
+            // appends the files text to its current contents
+            if (ext == ".txt")
             {
-                var response = Client.TranslateText(newString, LanguageKeys[box2.SelectedItem.ToString()]);
-                translatedText.Text = response.TranslatedText + translatedSubString;
+                //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                string temp = File.ReadAllText(filePath);
+                textToTranslate.AppendText(temp);
             }
-            // we typically do not want this to happen, handle as much failure cases as possible
-            catch (Exception exc)
+            else if (ext == ".pdf")
             {
-                translatedText.Text = "Unexpected Error\n"
-                                    + exc.Message;
+                string pdfContents = GetText(filePath);
+                if (pdfContents == null)
+                {
+                    fileName.Items.Remove(filePath);
+                    return;
+                }
+                else
+                {
+                    // line separation formatting
+                    if (textToTranslate.Text.Length > 0) textToTranslate.AppendText("\n\n");
+                    textToTranslate.AppendText(pdfContents);
+                }
             }
+            else
+                textToTranslate.Text = "Current file format is not supported";
         }
 
         private void Clear(object sender, RoutedEventArgs e)
@@ -162,25 +207,7 @@ namespace TranslationApp
 
                     fileName.Items.Add(Path.GetFullPath(filePath));
 
-                    //get the current file then read it
-                    string file = filePath;
-                    string ext = Path.GetExtension(filePath);
-                    // appends the files text to its current contents
-
-                    if (ext == ".txt")
-                    {
-                        //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
-                        string temp = File.ReadAllText(filePath);
-                        textToTranslate.AppendText(temp);
-                    }
-                    else if (ext == ".pdf")
-                    {
-                        string pdfContents = GetText(filePath);
-                        textToTranslate.AppendText(pdfContents); //= pdfContents;
-                        //FPATH = openFileDialog.FileName;
-                    }
-                    else
-                        textToTranslate.Text = "Current file format is not supported";
+                    ReadFromFile(filePath);
                 }
             }
         }
@@ -196,8 +223,7 @@ namespace TranslationApp
             {
                 //get the current file then read it
                 ListBoxItem file = (ListBoxItem)fileName.ItemContainerGenerator.ContainerFromIndex(i);
-                string temp = File.ReadAllText(file.Content.ToString());
-                textToTranslate.AppendText(temp);
+                ReadFromFile(file.Content.ToString());
             }
         }
 
@@ -222,7 +248,6 @@ namespace TranslationApp
         }
 
         // triggers application light mode
-
         private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
         {
             if (translatedText.Text == "")
@@ -235,6 +260,7 @@ namespace TranslationApp
                 ExportPDF(translatedText.Text);
             }
         }
+
         private void LightModeChecked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.TranslationApp = "Light";
