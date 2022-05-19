@@ -142,7 +142,7 @@
 
             <Button 
             Name="btnOpenFile" 
-            Click="btnOpenFile_Click"
+            Click="OpenFile_Click"
             Content="File" 
             HorizontalAlignment="Left" 
             Margin="50,10,0,0" 
@@ -233,7 +233,7 @@
                      Checked="DarkModeChecked" />
 
             <Button x:Name="btnExportTxtFile"
-                Click="btnExportTxtFile_Click"
+                Click="ExportTxtFile_Click"
                 Content="Export to .txt"
                 HorizontalAlignment="Left"
                 Margin="50,10"
@@ -250,7 +250,7 @@
             </Button>
 
             <Button x:Name="btnExportPDFFile"
-                Click="btnExportPDFFile_Click"
+                Click="ExportPDFFile_Click"
                 Content="Export to .PDF"
                 HorizontalAlignment="Left"
                 Margin="175,655,0,0"
@@ -267,7 +267,7 @@
             </Button>
             
             <Button x:Name="btnExportToMultiFile"
-                Click="btnExportMultiFile_Click"
+                Click="ExportMultiFile_Click"
                 Content="Export files"
                 HorizontalAlignment="Left"
                 Margin="300,655,0,0"
