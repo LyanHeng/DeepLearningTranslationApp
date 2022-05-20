@@ -157,7 +157,7 @@ namespace TranslationApp
             {
                 string pdfContents = GetText(filePath);
                 // check characters after symbols or punctuation OR check for no symbols present
-                string regex = @"^[^\p{S}]+$|(?<=\p{S}|\p{P})\w{5,}";
+                string regex = @"^[^\p{S}\u0003]+$|(?<=\p{S}|\p{P})\w{5,}";
 
                 if (pdfContents == null)
                 {
