@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+<<<<<<< HEAD
 using System.Linq;
 using System.Text;
 using System.Threading;
+=======
+using System.Windows;
+>>>>>>> origin/main
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Content;
@@ -116,9 +120,20 @@ namespace TranslationApp.Classes
             Process.Start(filename);
 
         }
+
         public static string GetText(string pdfFileName)
         {
-            PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
+            // this could fail in many cases. There is no perfect way in handling this.
+            PdfDocument OriginPDF = null;
+            try
+            {
+                OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Given PDF File not supported/invalid\n" + exc.Message);
+                return null;
+            }
             string sentence = "";
  
             foreach (PdfPage page in OriginPDF.Pages)
