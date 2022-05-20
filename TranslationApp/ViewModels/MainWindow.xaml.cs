@@ -221,14 +221,11 @@ namespace TranslationApp
             if (translatedText.Text == "")
             {
                 //add error handling
-                //for testing so no excessive APIS
-                ExportPDF(textToTranslate.Text);
                 textToTranslate.Text = "Must have text to translate & export first";
             }
             else
             {
                 ExportPDF(translatedText.Text);
-              
             }
         }
         #endregion
