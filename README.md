@@ -6,7 +6,12 @@
 
 The main aim of the project is to provide a translation application that builds on top of Google Cloud Translation API. The application provides an interface for direct text translation between various numbers of supported languages. The application also provide an interface to perform text file and PDF file translation. Furthermore, the application provides additional features including but not limited to: translating multiple files at once and translating a file into multiple languages.
 
+### First Page:
+
 ![alt text](/TranslationApp/Images/FirstPage.PNG)
+
+### Second Page:
+
 ![alt text](/TranslationApp/Images/SecondPage.PNG)
 
 ---
