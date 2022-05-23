@@ -119,7 +119,7 @@
 
             <Button 
             Name="btnOpenFile" 
-            Click="btnOpenFile_Click"
+            Click="OpenFile_Click"
             Content="File" 
             HorizontalAlignment="Left" 
             Margin="50,10,0,0" 
@@ -150,12 +150,12 @@
                 </Button.Resources>
             </Button>
 
-
             <ListBox Name="multiLangSelect"
-                      Grid.Column="2" Grid.Row="1"
+                Grid.Column="2" 
+                Grid.Row="1"
                 Height="100"
-                     Width="250"
-                     Margin="205,10.333,195,625.667">
+                Width="250"
+                Margin="205,10.333,195,625.667">
                 <ListBox.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
@@ -295,9 +295,9 @@
                 Grid.Column="2" 
                 Height="40" 
                 Width="40"
-                Click="Add_Click" 
+                Click="ClearList" 
                 FontFamily="/Fonts/#Roboto"
-                Content="Add +" Margin="468,166.333,142,529.667">
+                Content="Clear" Margin="468,166.333,142,529.667">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
