@@ -116,15 +116,23 @@ namespace TranslationApp
             else if (ext == ".pdf")
             {
                 string pdfContents = GetText(filePath);
+                // check characters after symbols or punctuation OR check for no symbols present
+                string regex = @"^[^\p{S}\u0003]+$|(?<=\p{S}|\p{P})\w{5,}";
+
                 if (pdfContents == null)
                 {
                     fileName.Items.Remove(filePath);
                     return;
                 }
-                else
+                else if (Regex.IsMatch(pdfContents, regex))
                 {
                     textToTranslate.AppendText(pdfContents);
                     fileTranslationStatusBox.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    MessageBox.Show("Unable to read contents of pdf from " + filePath + ". Please try copying contents of pdf into a txt file");
+                    fileName.Items.Remove(filePath);
                 }
             }
             else
