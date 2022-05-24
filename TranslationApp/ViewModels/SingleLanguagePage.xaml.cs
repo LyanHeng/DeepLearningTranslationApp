@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Collections.Generic;
@@ -7,52 +7,44 @@ using Microsoft.Win32;
 using static TranslationApp.Classes.PdfSharpExtensions;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
+using System.Windows.Navigation;
 using TranslationApp.Views;
 
 namespace TranslationApp
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for SingleLanguagePage.xaml
+    /// </summary>
+    public partial class SingleLanguagePage : Page
     {
-        // fields for text translation
-        private Dictionary<string, string> m_languagesKeys = new Dictionary<string, string>();
-        private TranslationClient m_client = TranslationClient.CreateFromApiKey(Environment.GetEnvironmentVariable("api_key"));
-
-        // properties
-        public Dictionary<string, string> LanguageKeys { get => m_languagesKeys; set => m_languagesKeys = value; }
-        public TranslationClient Client { get => m_client; }
-
-        public MainWindow()
+        public SingleLanguagePage()
         {
             InitializeComponent();
-            PopulateLanguageComboBoxes();
+            PopulateLanguageComboBoxes(); 
         }
 
         #region Methods
-        // retrieve all supported languages from Google Service
+        // populate the check boxes for language selection
         private void PopulateLanguageComboBoxes()
         {
             box2.Items.Clear();
             // get all supported language by Google
             // "en" - defines the language of all the names of the languages
-            IList<Language> supportedLanguages = Client.ListLanguages("en");
-            foreach (Language language in supportedLanguages)
+            foreach (string language in App.LanguageKeys.Keys)
             {
-                if (!LanguageKeys.ContainsKey(language.Name))
-                {
-                    LanguageKeys.Add(language.Name, language.Code);
-                    box2.Items.Add(language.Name);
-                }
+                box2.Items.Add(language);
             }
             // default language to english
             box2.SelectedItem = "English";
         }
 
+        // translate a given text provided a given languages
         private string Translate(string text, string targetLanguage)
         {
             string result = "";
             try
             {
-                var response = Client.TranslateText(text, LanguageKeys[targetLanguage]);
+                var response = App.Client.TranslateText(text, App.LanguageKeys[targetLanguage]);
                 if (response.TranslatedText != null)
                 {
                     result = response.TranslatedText;
@@ -69,12 +61,13 @@ namespace TranslationApp
             }
             return result;
         }
-        
-        public string subStringTranslate(string substring)
+
+        // translate a substring to handle the 5000 characters limit
+        public string SubStringTranslate(string substring)
         {
             if (substring.Length < 5000)
             {
-                var response = Client.TranslateText(substring, LanguageKeys[box2.SelectedItem.ToString()]);
+                var response = App.Client.TranslateText(substring, App.LanguageKeys[box2.SelectedItem.ToString()]);
                 return response.TranslatedText;
             }
 
@@ -93,15 +86,58 @@ namespace TranslationApp
                 int positionOfNewline = substring.LastIndexOf(matchList[i]);
                 if (positionOfNewline < 5000)
                 {
-                    var response = Client.TranslateText(substring.Substring(0, positionOfNewline), LanguageKeys[box2.SelectedItem.ToString()]);
+                    var response = App.Client.TranslateText(substring.Substring(0, positionOfNewline), App.LanguageKeys[box2.SelectedItem.ToString()]);
                     newString = response.TranslatedText;
                     substring = substring.Substring(positionOfNewline, substring.Length - positionOfNewline);
                     break;
                 }
             }
-            return newString + subStringTranslate(substring);
+            return newString + SubStringTranslate(substring);
         }
 
+        // read from a file with different file extension and print into text box
+        private void ReadFromFile(string filePath)
+        {
+            //get the current file then read it
+            string ext = Path.GetExtension(filePath);
+
+            // appends the files text to its current contents
+            if (ext == ".txt")
+            {
+                //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
+                string temp = File.ReadAllText(filePath);
+                textToTranslate.AppendText(temp);
+            }
+            else if (ext == ".pdf")
+            {
+                string pdfContents = GetText(filePath);
+                // check characters after symbols or punctuation OR check for no symbols present
+                string regex = @"^[^\p{S}\u0003]+$|(?<=\p{S}|\p{P})\w{5,}";
+
+                if (pdfContents == null)
+                {
+                    fileName.Items.Remove(filePath);
+                    return;
+                }                
+                else if (Regex.IsMatch(pdfContents, regex))
+                {
+                    // line separation formatting
+                    if (textToTranslate.Text.Length > 0) textToTranslate.AppendText("\n\n");
+                    textToTranslate.AppendText(pdfContents);
+                }
+                else
+                {
+                    MessageBox.Show("Unable to read contents of pdf from " + filePath + ". Please try copying contents of pdf into a txt file");
+                    fileName.Items.Remove(filePath);
+                }
+            }
+            else
+                textToTranslate.Text = "Current file format is not supported";
+        }
+        #endregion
+
+
+        #region Handlers
         // translate provided text
         private void TranslateText(object sender, RoutedEventArgs e)
         {
@@ -128,7 +164,7 @@ namespace TranslationApp
                     if (positionOfNewline < 5000)
                     {
                         string partAfterNewline = textToTranslate.Text.Substring(positionOfNewline, textToTranslate.Text.Length - positionOfNewline);
-                        translatedSubString = subStringTranslate(partAfterNewline);
+                        translatedSubString = SubStringTranslate(partAfterNewline);
                         newString = textToTranslate.Text.Substring(0, positionOfNewline);
                         break;
                     }
@@ -140,90 +176,15 @@ namespace TranslationApp
             translatedText.Text = translatedResult;
         }
 
-        // translate into multiple languages
-        private void TranslateToMultiLanguage(object sender, RoutedEventArgs e)
-        {
-            // temporary string array to store multiple arrays
-            // once UI is provided, this will retrieve this from the UI
-
-            string[] targetLanguages = { "Khmer", "French", "Chinese (Simplified)" };
-
-            // temporary storage of translated text in different languages
-            List<string> filePaths = new List<string>();
-
-            // folder handling
-            string translatedFolder = "translated";
-            string pathHeaders = translatedFolder + @"\";
-            Directory.CreateDirectory(translatedFolder);
-
-            // iterate through each language
-            foreach (string language in targetLanguages)
-            {
-                string translatedResult = Translate(textToTranslate.Text, language);
-
-                // create file
-                string pathToFileToCreate = pathHeaders + language + ".txt";
-                filePaths.Add(pathToFileToCreate);
-                File.WriteAllText(pathToFileToCreate, translatedResult);
-            }
-
-            // TODO: Notify the user that it has completed and where to find the files
-        }
-
+        // clear filename textbox
         private void Clear(object sender, RoutedEventArgs e)
         {
             textToTranslate.Text = String.Empty;
             fileName.Items.Clear();
         }
 
-
-        private void SingleLangButton_Click(object sender, RoutedEventArgs e)
-        {
-            SingleLanguagePage newPage = new SingleLanguagePage();
-            this.Content = newPage;
-        }
-
-        private void MultiLangButton_Click(object sender, RoutedEventArgs e)
-        {
-            MultiLanguagesPage newPage = new MultiLanguagesPage();
-            this.Content = newPage;
-        }
-
-
-        // Read from a file with different file extension and print into text box
-        private void ReadFromFile(string filePath)
-        {
-            //get the current file then read it
-            string ext = Path.GetExtension(filePath);
-
-            // appends the files text to its current contents
-            if (ext == ".txt")
-            {
-                //textToTranslate.Text = File.ReadAllText(openFileDialog.FileName);
-                string temp = File.ReadAllText(filePath);
-                textToTranslate.AppendText(temp);
-            }
-            else if (ext == ".pdf")
-            {
-                string pdfContents = GetText(filePath);
-                if (pdfContents == null)
-                {
-                    fileName.Items.Remove(filePath);
-                    return;
-                }
-                else
-                {
-                    textToTranslate.AppendText(pdfContents);
-                }
-            }
-            else
-                textToTranslate.Text = "Current file format is not supported";
-        }
-        #endregion
-
-        #region Handlers
         // open file dialog
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -243,9 +204,10 @@ namespace TranslationApp
             }
         }
 
+        // delete selected file
         private void DelItem_Click(object sender, RoutedEventArgs e)
         {
-            if(fileName.SelectedItem != null)
+            if (fileName.SelectedItem != null)
             {
                 fileName.Items.Remove(fileName.SelectedItem);
             }
@@ -258,16 +220,17 @@ namespace TranslationApp
             }
         }
 
-        private void btnExportTxtFile_Click(object sender, RoutedEventArgs e)
+        // handler to export to txt file
+        private void ExportTxtFile_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Text Files(*.txt)|*.txt|All(*.*)|*";
             if (saveFileDialog.ShowDialog() == true)
                 File.WriteAllText(saveFileDialog.FileName, translatedText.Text);
-
         }
 
-        private void btnExportMultiFile_Click(object sender, RoutedEventArgs e)
+        // handler to export to multiple files
+        private void ExportMultiFile_Click(object sender, RoutedEventArgs e)
         {
             //open popup window
             if (fileName.Items.Count != 0)
@@ -277,6 +240,20 @@ namespace TranslationApp
             }
             else
                 MessageBox.Show("Please add files first!");
+        }
+
+        // triggers application light mode
+        private void ExportPDFFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (translatedText.Text == "")
+            {
+                //add error handling
+                MessageBox.Show("Must have text to translate & export first");
+            }
+            else
+            {
+                ExportPDF(translatedText.Text);
+            }
         }
 
         // triggers application light mode
@@ -296,18 +273,21 @@ namespace TranslationApp
             //and to save the settings
             Properties.Settings.Default.Save();
         }
-        private void btnExportPDFFile_Click(object sender, RoutedEventArgs e)
+
+        // triggers single page
+        private void SingleLangButton_Click(object sender, RoutedEventArgs e)
         {
-            if (translatedText.Text == "")
-            {
-                //add error handling
-                textToTranslate.Text = "Must have text to translate & export first";
-            }
-            else
-            {
-                ExportPDF(translatedText.Text);
-            }
+            NavigationService nav = NavigationService.GetNavigationService(this);
+            nav.Navigate(new Uri("./Views/SingleLanguagePage.xaml", UriKind.RelativeOrAbsolute));
+        }
+
+        // triggers multi page
+        private void MultiLangButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService nav = NavigationService.GetNavigationService(this);
+            nav.Navigate(new Uri("./Views/MultiLanguagesPage.xaml", UriKind.RelativeOrAbsolute));
         }
         #endregion
     }
 }
+
