@@ -92,15 +92,14 @@
             </Button>
 
             <Button 
-            Grid.Row="1" 
             Grid.Column="0" 
             Width="75"
             VerticalAlignment="Top"
             HorizontalAlignment="Right"
             Click="Clear" 
             FontFamily="/Fonts/#Roboto"
-            Content="Clear Text" 
-            Margin="0,47.5,50,0">
+            Content="Clear All" 
+            Margin="0,35,50,0">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
@@ -115,22 +114,6 @@
             Content="File" 
             HorizontalAlignment="Left" 
             Margin="50,35,0,0" 
-            VerticalAlignment="Top" 
-            FontFamily="/Fonts/#Roboto"
-            Width="75">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius"
-                            Value="7" />
-                    </Style>
-                </Button.Resources>
-            </Button>
-
-            <Button 
-            Click="DelItem_Click"
-            Content="Delete Item" 
-            HorizontalAlignment="Right" 
-            Margin="0,35,50,0" 
             VerticalAlignment="Top" 
             FontFamily="/Fonts/#Roboto"
             Width="75">
