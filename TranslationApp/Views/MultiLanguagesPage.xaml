@@ -274,7 +274,7 @@
                 </Button.Resources>
             </Button>
             <TextBox
-                Visibility="Visible"
+                Visibility="Hidden"
                 Grid.Row="1" 
                 Grid.Column="2" 
                 Margin="0,450,195,249"
@@ -301,7 +301,6 @@
                     <StaticResource ResourceKey="TextBoxStyle"/>
                 </TextBox.Style>
             </TextBox>
-
         </Grid>
     </Viewbox>
 </Page>
