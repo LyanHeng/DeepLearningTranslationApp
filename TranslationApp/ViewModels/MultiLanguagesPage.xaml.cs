@@ -203,22 +203,6 @@ namespace TranslationApp
             }
         }
 
-        // delete selected file
-        private void DelItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (fileName.SelectedItem != null)
-            {
-                fileName.Items.Remove(fileName.SelectedItem);
-            }
-            textToTranslate.Text = String.Empty;
-            for (int i = 0; i < fileName.Items.Count; i++)
-            {
-                //get the current file then read it
-                ListBoxItem file = (ListBoxItem)fileName.ItemContainerGenerator.ContainerFromIndex(i);
-                ReadFromFile(file.Content.ToString());
-            }
-        }
-
         // triggers application light mode
         private void LightModeChecked(object sender, RoutedEventArgs e)
         {
@@ -301,6 +285,7 @@ namespace TranslationApp
             fileName.Items.Clear();
             fileTranslationStatusBox.Text = "";
             fileTranslationStatusBox.Visibility = Visibility.Hidden;
+            ClearList(sender, e);
         }
 
         // triggers single page
