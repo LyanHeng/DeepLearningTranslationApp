@@ -19,13 +19,6 @@
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <Frame x:Name="SingleLanguages" 
-                   Grid.RowSpan="2" 
-                   HorizontalAlignment="Stretch" 
-                   VerticalAlignment="Stretch" 
-                   HorizontalContentAlignment="Stretch" 
-                   VerticalContentAlignment="Stretch"  
-                   NavigationUIVisibility="Hidden"/>
 
             <Grid Grid.Row="1" Grid.Column="0">
                 <TextBox x:Name="textToTranslate"
@@ -51,12 +44,12 @@
                 <TextBlock IsHitTestVisible="False"
                        Text="Detect language"
                        VerticalAlignment="Top"
-                       Margin="50,50,50,0"
+                       Margin="52,58,48,0"
                        Padding="3,0,0,0"
                        FontSize="13"
                        FontFamily="/Fonts/#Roboto"
                        Foreground="DarkGray"
-                       Grid.Column="0" Grid.ColumnSpan="2">
+                       Grid.Column="0">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -265,7 +258,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
-            
+
             <Button x:Name="btnExportToMultiFile"
                 Click="ExportMultiFile_Click"
                 Content="Export files"
@@ -314,7 +307,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
-           
+
         </Grid>
     </Viewbox>
 </Page>
