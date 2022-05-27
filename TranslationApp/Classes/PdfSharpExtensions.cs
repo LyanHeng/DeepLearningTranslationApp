@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-<<<<<<< HEAD
-using System.Linq;
-using System.Text;
-using System.Threading;
-=======
 using System.Windows;
->>>>>>> origin/main
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Content;
@@ -17,14 +11,21 @@ using System.Text.RegularExpressions;
 using PdfSharp.Drawing.Layout;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
+using System.IO;
 
 namespace TranslationApp.Classes
 {
     public static class PdfSharpExtensions
     {
-
+        /*PDF sharp default library is not able to read text from an existing PDF
+         * this extension allows us to read the doc, courtesy of stackoverflow + various hours of research &testing
+         * Than other additional code that allows us to handle creating the translated PDFS
+         */
         public static string Formatting(string text)
         {
+            //since the text in PDFS don't contain things like linebreaks
+            //We need to somewhat create some formatting 
+            //Imperfect solution to this problem but makes it readable for users
             List<string> matchList = new List<string>();
             List<int> matchIndex = new List<int>();
             var regex = new Regex(@"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", RegexOptions.Compiled);
@@ -41,85 +42,101 @@ namespace TranslationApp.Classes
             }
             return text;
         }
-        public static void Render(XGraphics gfx)
+        public static Document CreateDocument(string toPrint)
         {
-            PdfDocument document = new PdfDocument();
-
-            PdfPage page = document.AddPage();
-           // XGraphics gfx = XGraphics.FromPdfPage(page);
-
-            const bool unicode = false;
-
-            Document doc = CreateDocument();
-            PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(unicode);
-            //pdfRenderer.Document = doc;
-            DocumentRenderer cunt = new DocumentRenderer(doc);
-            cunt.PrepareDocument();
-            //cunt.RenderObject(gfx,);
-            
-        }
-        public static Document CreateDocument()
-        {
+            //create our Migradoc
             Document mydoc = new Document();
             Section section = mydoc.AddSection();
-
+    
+            Paragraph header = section.AddParagraph();
+            //Mock wordewise plug :)
+            header.AddFormattedText("Document translated by wordwise ", TextFormat.Italic);
+            header.AddLineBreak();
+            //We add our text here
             Paragraph paragraph = section.AddParagraph();
+            paragraph.AddFormattedText(toPrint);
             
             paragraph.Format.Font.Color = Color.FromCmyk(100, 30, 20, 50);
- 
-            paragraph.AddFormattedText("Hello, World!", TextFormat.Bold);
+
             return mydoc;
         }
-        public static void ExportPDF(string text)
+
+        public static void AssemblePages(ref PdfDocument document, Document migraDocument )
         {
-            //string pdfFileName
-            //PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
-            PdfDocument NewDocument = new PdfDocument();
-
-            //create document info 
-            NewDocument.Info.Title = "Translated";//OriginPDF.Info.Title + "_Translated";
-
-            string formatted =Formatting(text);
-
-            PdfPage[] pages = new PdfPage[3];//testing with set val 
-
-            XGraphics[] gfx = new XGraphics[pages.Length];
-            for (int i = 0;i < pages.Length; i++)
+            var pdfRenderer = new DocumentRenderer(migraDocument);
+            pdfRenderer.PrepareDocument();
+            int pages = pdfRenderer.FormattedDocument.PageCount;
+            for (int i = 1; i <= pages; ++i)
             {
-                pages[i] = NewDocument.AddPage();
-                gfx[i] = XGraphics.FromPdfPage(pages[i]);
+                var page = document.AddPage();
 
+                PageInfo pageInfo = pdfRenderer.FormattedDocument.GetPageInfo(i);
+                page.Width = pageInfo.Width;
+                page.Height = pageInfo.Height;
+                page.Orientation = pageInfo.Orientation;
+
+                using (XGraphics gfx = XGraphics.FromPdfPage(page))
+                {
+                    // HACK²
+                    gfx.MUH = PdfFontEncoding.Unicode;
+                    pdfRenderer.RenderPage(gfx, i);
+                }
             }
-            string sub = "";
-            if (formatted.Length > 3000)
+        }
+
+        public static void ExportPDF(string text, string lang)
+        {
+
+            //create our PDF document 
+            PdfDocument document = new PdfDocument();
+            //format our string to a satisfactory degree
+            string formatted = Formatting(text);
+            //create a migra doc as it is able to handle multupage formatting much better
+            Document migraDocument = CreateDocument(formatted);
+
+            //this allows us to handle cases where text doesnt fit on all pages
+            AssemblePages(ref document,migraDocument);
+            //document info 
+            document.Info.Title = "Translated into" + lang ;
+
+            //In future improve so that it allows the users to name and chose where to save document 
+            // folder handling
+            string folderName = "translated";
+            string translatedFolder = @"..\..\..\" + folderName;
+            string targetDirectory = Directory.GetCurrentDirectory() + @"\" + translatedFolder;
+            //really basic but does the job
+            string filename = lang + text.Substring(0, 10)+".pdf";
+            string savePath = Path.Combine(targetDirectory, filename);
+            // reset directory
+            DirectoryInfo di = new DirectoryInfo(targetDirectory);
+            if (Directory.Exists(targetDirectory))
             {
-                sub = formatted.Substring(3000);
-            }
-            //fonts
-            XFont Sfont = new XFont("Verdana", 5, XFontStyle.Italic);
-            XFont font = new XFont("Verdana", 10, XFontStyle.Regular);
-            //text formater
-            XTextFormatter tf = new XTextFormatter(gfx[0]);
-            XTextFormatter tf2 = new XTextFormatter(gfx[1]);
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    if (file.Name == filename)
+                    {
+                        //this should prevent app crashing when opening a existing document
+                        //OS prevents us from deleting file if its open 
+                        file.Delete();
+                    }
+                    
+                }
+            }else
+            Directory.CreateDirectory(translatedFolder);
+            //Improve for user friendliness
+            try
+            {
+                document.Save(savePath);
+                //start directory instead of file to show user where file is without crashing app 
+                Process.Start(targetDirectory);
 
-            //shilling wordwise 
-            gfx[0].DrawString("Document translated by WordWise", Sfont, XBrushes.Red,new XRect(20, 20, 50, 50),XStringFormats.Center);
-
-            XRect rect = new XRect(40, 100, (pages[0].Width * 9/10), (pages[0].Height *9/10));
-            gfx[0].DrawRectangle(XBrushes.SeaShell, rect);
-            tf.DrawString(formatted,font,XBrushes.Black,rect,XStringFormats.TopLeft);
-
-            gfx[1].DrawRectangle(XBrushes.SeaShell, rect);
-            tf2.DrawString(sub, font, XBrushes.Black, rect, XStringFormats.TopLeft);
-
-            const string filename = "translated_doc.pdf";
-
-            //Improve for user friendliness 
-            NewDocument.Save(filename);
-            
-            Process.Start(filename);
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString()); 
+            }           
 
         }
+
 
         public static string GetText(string pdfFileName)
         {

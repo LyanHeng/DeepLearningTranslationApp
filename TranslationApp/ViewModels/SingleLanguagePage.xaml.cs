@@ -244,7 +244,7 @@ namespace TranslationApp
             }
             else
             {
-                ExportPDF(translatedText.Text);
+                ExportPDF(translatedText.Text, box2.SelectedItem.ToString());
             }
         }
 
