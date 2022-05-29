@@ -4,10 +4,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TranslationApp"
-      mc:Ignorable="d" 
-      Title="MultiLanguagesPage" 
-       Style="{StaticResource PageStyle}">
-
+      mc:Ignorable="d"
+      WindowTitle="Word Wise" 
+      Style="{StaticResource PageStyle}">
     <Viewbox>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -19,13 +18,6 @@
                 <RowDefinition Height="75"/>
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <Frame x:Name="MultipleLanguages" 
-                   Grid.RowSpan="2" 
-                   HorizontalAlignment="Stretch" 
-                   VerticalAlignment="Stretch" 
-                   HorizontalContentAlignment="Stretch" 
-                   VerticalContentAlignment="Stretch"  
-                   NavigationUIVisibility="Hidden"/>
 
             <Grid Grid.Row="1" Grid.Column="0">
                 <TextBox x:Name="textToTranslate"
@@ -37,9 +29,9 @@
                      VerticalScrollBarVisibility="Auto"
                      AcceptsReturn="True"
                      FontFamily="/Fonts/#Roboto"
-                     Margin="50,50,50,50"
+                     Margin="50,-5,50,41"
                      BorderBrush="DarkGray"
-                     Style="{StaticResource TextBoxStyle}" Grid.ColumnSpan="2">
+                     Style="{StaticResource TextBoxStyle}">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius"
@@ -51,7 +43,7 @@
                 <TextBlock IsHitTestVisible="False"
                        Text="Detect language"
                        VerticalAlignment="Top"
-                       Margin="53,55,47,0"
+                       Margin="53,87,47,0"
                        Padding="3,0,0,0"
                        FontSize="13"
                        FontFamily="/Fonts/#Roboto"
@@ -70,8 +62,7 @@
                 </TextBlock>
 
                 <ListBox x:Name="fileName"
-                         Margin="50,-40,49,670"
-                         Grid.ColumnSpan="2"
+                         Margin="49,-15,50,749"
                          MaxHeight="55"
                          Height="55">
                     <ListBox.Resources>
@@ -100,15 +91,14 @@
             </Button>
 
             <Button 
-            Grid.Row="1" 
             Grid.Column="0" 
             Width="75"
             VerticalAlignment="Top"
             HorizontalAlignment="Right"
             Click="Clear" 
             FontFamily="/Fonts/#Roboto"
-            Content="Clear Text" 
-            Margin="420,21,50,0">
+            Content="Clear All" 
+            Margin="0,35,50,0">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
@@ -122,23 +112,7 @@
             Click="OpenFile_Click"
             Content="File" 
             HorizontalAlignment="Left" 
-            Margin="50,10,0,0" 
-            VerticalAlignment="Top" 
-            FontFamily="/Fonts/#Roboto"
-            Width="75">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius"
-                            Value="7" />
-                    </Style>
-                </Button.Resources>
-            </Button>
-
-            <Button 
-            Click="DelItem_Click"
-            Content="Delete Item" 
-            HorizontalAlignment="Right" 
-            Margin="0,10,50,0" 
+            Margin="50,35,0,0" 
             VerticalAlignment="Top" 
             FontFamily="/Fonts/#Roboto"
             Width="75">
@@ -162,37 +136,15 @@
                             Value="7" />
                     </Style>
                 </ListBox.Resources>
-
             </ListBox>
-
-
-
-            <!--
-            <ComboBox 
-                Name="multiLangSelect2"
-                Height="30"
-                Margin="90,73.333,80,0" 
-                Text="English" 
-                VerticalAlignment="Top"
-                HorizontalAlignment="Stretch"
-                FontFamily="/Fonts/#Roboto"
-                IsEditable="True"
-                IsReadOnly="True" 
-                Grid.Column="2" Grid.Row="1">
-                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-                <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
-                <ScrollViewer></ScrollViewer>
-
-            </ComboBox>
-          -->
 
             <TextBox 
             Grid.Row="1" 
             Grid.Column="2" 
             Margin="90,122.333,80,498"
             MaxHeight="580"
-                Width="250"
-                Height="100"
+            Width="250"
+            Height="100"
             VerticalAlignment="Stretch"
             TextWrapping="Wrap"
             HorizontalAlignment="Stretch"
@@ -256,7 +208,6 @@
                      GroupName="modeSelection"
                      Checked="DarkModeChecked" />
 
-
             <Button x:Name="SingleLangButton"                   
                     Content="Single" 
                     Click="SingleLangButton_Click" 
@@ -289,7 +240,6 @@
                 </Button.Resources>
             </Button>
 
-
             <Button 
                 Grid.Row="1" 
                 Grid.Column="2" 
@@ -309,12 +259,14 @@
                 Visibility="Hidden"
                 Grid.Row="1" 
                 Grid.Column="2" 
-                Margin="205,447,195,249"
-                MaxHeight="580"
+                Margin="0,450,195,249"
+                Height="90"
+                MaxHeight="90"
                 Width="250"
+                MaxWidth="250"
                 VerticalAlignment="Stretch"
                 TextWrapping="Wrap"
-                HorizontalAlignment="Stretch"
+                HorizontalAlignment="Right"
                 VerticalScrollBarVisibility="Auto"
                 BorderBrush="DarkGray"
                 x:Name="fileTranslationStatusBox"
