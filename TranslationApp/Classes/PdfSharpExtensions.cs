@@ -7,77 +7,136 @@ using PdfSharp.Pdf;
 using PdfSharp.Pdf.Content;
 using PdfSharp.Pdf.Content.Objects;
 using PdfSharp.Pdf.IO;
+using System.Text.RegularExpressions;
+using PdfSharp.Drawing.Layout;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.Rendering;
+using System.IO;
 
 namespace TranslationApp.Classes
 {
     public static class PdfSharpExtensions
     {
-
-        public static List<string> Format(string text)
+        /*PDF sharp default library is not able to read text from an existing PDF
+         * this extension allows us to read the doc, courtesy of stackoverflow + various hours of research &testing
+         * Than other additional code that allows us to handle creating the translated PDFS
+         */
+        public static string Formatting(string text)
         {
-            //maybe need to add divide for length of string 
-            string tobe = "";
-            List<string> divided = new List<string>();
-            foreach (var i in text)
+            //since the text in PDFS don't contain things like linebreaks
+            //We need to somewhat create some formatting 
+            //Imperfect solution to this problem but makes it readable for users
+            List<string> matchList = new List<string>();
+            List<int> matchIndex = new List<int>();
+            var regex = new Regex(@"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", RegexOptions.Compiled);
+            foreach (Match match in regex.Matches(text))
             {
-                tobe += i.ToString();
-                if (i.ToString() == "." || i.ToString() == "!" || i.ToString() == "?")
+                matchIndex.Add(match.Index);
+            }
+            for (int i = matchIndex.Count -1; i > 0; i--)
+            {
+                int position = matchIndex[i] ;
+                text =text.Insert(position, "\n");
+                text = text.Remove(position + 1, 1);
+  
+            }
+            return text;
+        }
+        public static Document CreateDocument(string toPrint)
+        {
+            //create our Migradoc
+            Document mydoc = new Document();
+            Section section = mydoc.AddSection();
+    
+            Paragraph header = section.AddParagraph();
+            //Mock wordewise plug :)
+            header.AddFormattedText("Document translated by wordwise ", TextFormat.Italic);
+            header.AddLineBreak();
+            //We add our text here
+            Paragraph paragraph = section.AddParagraph();
+            paragraph.AddFormattedText(toPrint);
+            
+            paragraph.Format.Font.Color = Color.FromCmyk(100, 30, 20, 50);
+
+            return mydoc;
+        }
+
+        public static void AssemblePages(ref PdfDocument document, Document migraDocument )
+        {
+            var pdfRenderer = new DocumentRenderer(migraDocument);
+            pdfRenderer.PrepareDocument();
+            int pages = pdfRenderer.FormattedDocument.PageCount;
+            for (int i = 1; i <= pages; ++i)
+            {
+                var page = document.AddPage();
+
+                PageInfo pageInfo = pdfRenderer.FormattedDocument.GetPageInfo(i);
+                page.Width = pageInfo.Width;
+                page.Height = pageInfo.Height;
+                page.Orientation = pageInfo.Orientation;
+
+                using (XGraphics gfx = XGraphics.FromPdfPage(page))
                 {
-                    divided.Add(tobe);
-                    tobe = null;
+                    // HACK²
+                    gfx.MUH = PdfFontEncoding.Unicode;
+                    pdfRenderer.RenderPage(gfx, i);
                 }
-                //divided.Add(tobe);
             }
-            return divided; //returns list of strings divided by punctuation 
         }
-        public static void ExportPDF(string text)
+
+        public static void ExportPDF(string text, string lang)
         {
-            //string pdfFileName
-            //PdfDocument OriginPDF = PdfReader.Open(pdfFileName, PdfDocumentOpenMode.ReadOnly);
-            PdfDocument NewDocument = new PdfDocument();
-            //create document info 
-            //string name = OriginPDF.Info.Title + "_Translated";//not sure about keeping this
-            NewDocument.Info.Title = "a Title";//OriginPDF.Info.Title + "_Translated";
 
+            //create our PDF document 
+            PdfDocument document = new PdfDocument();
+            //format our string to a satisfactory degree
+            string formatted = Formatting(text);
+            //create a migra doc as it is able to handle multupage formatting much better
+            Document migraDocument = CreateDocument(formatted);
 
-            //List<string> division = Format(text); -> Disabled for now
-            List<string> division = new List<string>();
-            division.Add(text); //only left like this until sentence handling can be fixed
-            /*template for proper implementaion
-             * a new page is created for each page of doc
-             * cannot be further implemented due to there being no way of preserving original structure
-             * export to pdf will need to be reworked for original structure to be preserved
-             * To be further touched upon in SEM 1 final sprint
-            */
-            PdfPage page = NewDocument.AddPage();
-            XGraphics gfx = XGraphics.FromPdfPage(page);
-            XFont Sfont = new XFont("Verdana", 5, XFontStyle.Italic);
-            XFont font = new XFont("Verdana", 10, XFontStyle.Regular);
-            //for testing string divider only 
-            XRect rect1 = new XRect(10, 10, page.Width / 3, page.Height / 3);
-            XRect rect2 = new XRect(10, 20, page.Width / 3, page.Height / 3);
-            //to do divide the page 
-            //consult http://www.pdfsharp.net/wiki/TextLayout-sample.ashx
-            //formatting looks bad atm
+            //this allows us to handle cases where text doesnt fit on all pages
+            AssemblePages(ref document,migraDocument);
+            //document info 
+            document.Info.Title = "Translated into" + lang ;
 
-            //maybe add draw for title here, or remove need for original file 
-
-            //shilling wordwise 
-            gfx.DrawString("Document translated by WordWise", Sfont, XBrushes.Red,
-            new XRect(20, 20, 50, 50),
-            XStringFormats.Center);
-            int y = 10;
-            foreach (var i in division)
+            //In future improve so that it allows the users to name and chose where to save document 
+            // folder handling
+            string folderName = "translated";
+            string translatedFolder = @"..\..\..\" + folderName;
+            string targetDirectory = Directory.GetCurrentDirectory() + @"\" + translatedFolder;
+            //really basic but does the job
+            string filename = lang + text.Substring(0, 10)+".pdf";
+            string savePath = Path.Combine(targetDirectory, filename);
+            // reset directory
+            DirectoryInfo di = new DirectoryInfo(targetDirectory);
+            if (Directory.Exists(targetDirectory))
             {
-                XRect rect = new XRect(10, y, page.Width / 10, page.Height / 5);
-                gfx.DrawString(i, font, XBrushes.Black, rect, XStringFormats.CenterLeft);
-                y = y + 10;
-            }
-            const string filename = "test.pdf";
-            NewDocument.Save(filename);
-            Process.Start(filename);
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    if (file.Name == filename)
+                    {
+                        //this should prevent app crashing when opening a existing document
+                        //OS prevents us from deleting file if its open 
+                        file.Delete();
+                    }
+                    
+                }
+            }else
+            Directory.CreateDirectory(translatedFolder);
+            //Improve for user friendliness
+            try
+            {
+                document.Save(savePath);
+                //start directory instead of file to show user where file is without crashing app 
+                Process.Start(targetDirectory);
+
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString()); 
+            }           
 
         }
+
 
         public static string GetText(string pdfFileName)
         {
@@ -93,28 +152,22 @@ namespace TranslationApp.Classes
                 return null;
             }
             string sentence = "";
-            /*
-             * Still TODO:
-             * figure out how to split strings and keep some semblance of structure to the document 
-             * Change Export to PDF to be done in this section 
-            */
+ 
             foreach (PdfPage page in OriginPDF.Pages)
             {
                 PdfDictionary.PdfStream stream = page.Contents.Elements.GetDictionary(0).Stream;
                 var content = ContentReader.ReadContent(page);
                 //var result = new StringBuilder();
                 var text = ExtractText(content);
-
+               
                 foreach (var i in text)
                 {
-                    //add paragraph/structure handling here
-                    //unrealistic to do it properly on this end i beleive 
                     sentence += i.ToString();
                 }
             }
             return sentence;
         }
-        //could be used with export to txt functioanlity ?
+
         public static IEnumerable<string> ExtractText(this PdfPage page)
         {
             var content = ContentReader.ReadContent(page);

@@ -305,7 +305,8 @@ namespace TranslationApp
             }
             else
             {
-                ExportPDF(translatedText.Text);
+                string lang = box2.SelectedItem.ToString();
+                ExportPDF(translatedText.Text,lang);
             }
         }
         #endregion
