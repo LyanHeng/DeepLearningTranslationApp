@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Threading;
 using System.Collections.Generic;
 using Google.Cloud.Translation.V2;
 using Microsoft.Win32;
@@ -236,13 +237,48 @@ namespace TranslationApp
             }
         }
 
+        // perform one translation in one language in a separate thread (see reference)
+        private static void TranslateInNewThread(string textToTranslate, string targetLanguage, string translatedFolder)
+        {
+            string result = "";
+            try
+            {
+                var response = App.Client.TranslateText(textToTranslate, App.LanguageKeys[targetLanguage]);
+                if (response.TranslatedText != null)
+                {
+                    result = response.TranslatedText;
+                }
+                else
+                {
+                    result = "There exists issues with translation.";
+                }
+            }
+            // we typically do not want this to happen, handle as much failure cases as possible
+            catch (Exception exc)
+            {
+                result = "Unexpected Error\n" + exc.Message;
+            }
+
+            // create file
+            string pathToFileToCreate = translatedFolder + @"\" + targetLanguage + ".txt";
+            File.WriteAllText(pathToFileToCreate, result);
+        }
+
+        // Perform multithread translation by iterating through the languages
+        private static void MultiThreadTranslation(string textToTranslate, string[] targetLanguages, string translatedFolder)
+        {
+            // iterate through each language
+            foreach (string language in targetLanguages)
+            {
+                Thread thread = new Thread(new ThreadStart(() => TranslateInNewThread(textToTranslate, language, translatedFolder)));
+                thread.Start();
+            }
+        }
+
         // translate into multiple languages
         private void TranslateToMultiLanguage(object sender, RoutedEventArgs e)
         {
             string[] targetLanguages = selectedLanguagesBox.Text.Split('\n');
-
-            // temporary storage of translated text in different languages
-            List<string> filePaths = new List<string>();
 
             // folder handling
             string folderName = "translated";
@@ -261,20 +297,13 @@ namespace TranslationApp
             }
             Directory.CreateDirectory(translatedFolder);
 
-            // iterate through each language
-            foreach (string language in targetLanguages)
-            {
-                string translatedResult = TranslateWithSubString(textToTranslate.Text, language);
-
-                // create file
-                string pathToFileToCreate = translatedFolder + @"\" + language + ".txt";
-                filePaths.Add(pathToFileToCreate);
-                File.WriteAllText(pathToFileToCreate, translatedResult);
-            }
+            // translate multiple languages at the same time
+            MultiThreadTranslation(textToTranslate.Text, targetLanguages, translatedFolder);
 
             // Notify the user that it has completed and where to find the files
             string absolutePath = new Uri(Directory.GetCurrentDirectory() + @"\..\..\..\" + folderName).AbsoluteUri;
             fileTranslationStatusBox.Text = "Files can be found at\n\n" + absolutePath;
+            fileTranslationStatusBox.Text += "\n\nPlease wait for all files to be translated.";
             fileTranslationStatusBox.Visibility = Visibility.Visible;
         }
 
