@@ -53,7 +53,7 @@ To deploy and access the built project:
 
 1. Configure project to Release build.
 2. Build project.
-3. Deployed Application should be accessible in "Translation\bin\Release\net48\TranslationApp.exe"
+3. Deployed Application should be accessible in `Translation\bin\Release\WordWise.exe`
 
 ---
 

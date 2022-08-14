@@ -97,13 +97,14 @@ namespace TranslationApp.Views
                 {
                     ListBoxItem file = (ListBoxItem)popup.ItemContainerGenerator.ContainerFromItem(popup.SelectedItem);
                     var response = Client.TranslateText(File.ReadAllText(file.Content.ToString()), LanguageKeys[_language]);
-                    ExportPDF(response.TranslatedText);
+                    ExportPDF(response.TranslatedText, LanguageKeys[_language]);
                 }
                 else if (ext == ".pdf")
                 {
                     string pdfContents = GetText(popup.SelectedItem.ToString());
                     var response = Client.TranslateText(pdfContents, LanguageKeys[_language]);
-                    ExportPDF(response.TranslatedText);
+                    string lang = LanguageKeys[_language];
+                    ExportPDF(response.TranslatedText,lang);
                 }
             }   
         }
