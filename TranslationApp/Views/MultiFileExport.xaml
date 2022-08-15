@@ -17,13 +17,20 @@
                 HorizontalAlignment="Left"
                 Margin="50,10"
                 VerticalAlignment="Bottom"
-                Width="100">
+                Width="100"
+                ToolTipService.InitialShowDelay="500"
+                ToolTipService.ShowDuration="4000">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius"
                             Value="7" />
                 </Style>
             </Button.Resources>
+            <Button.ToolTip>
+                <StackPanel>
+                    <TextBlock FontWeight="DemiBold">Export selected file(s) to a .txt file</TextBlock>
+                </StackPanel>
+            </Button.ToolTip>
         </Button>
 
         <Button x:Name="btnExportPDFFile"
@@ -32,13 +39,20 @@
                 HorizontalAlignment="Left"
                 Margin="180,0,0,10"
                 VerticalAlignment="Bottom"
-                Width="100">
+                Width="100"
+                ToolTipService.InitialShowDelay="500"
+                ToolTipService.ShowDuration="4000">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius"
                             Value="7" />
                 </Style>
             </Button.Resources>
+            <Button.ToolTip>
+                <StackPanel>
+                    <TextBlock FontWeight="DemiBold">Export selected file(s) a .pdf file</TextBlock>
+                </StackPanel>
+            </Button.ToolTip>
         </Button>
 
     </Grid>
