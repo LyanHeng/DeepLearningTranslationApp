@@ -81,13 +81,20 @@
             Width="120"
             Click="TranslateToMultiLanguage" 
             FontFamily="/Fonts/#Roboto"
-            Content="Translate and Export">
+            Content="Translate and Export"
+                ToolTipService.ShowDuration="4000"
+                ToolTipService.InitialShowDelay="500">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
                             Value="7" />
                     </Style>
                 </Button.Resources>
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="DemiBold">Translate text to selected languages</TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
             </Button>
 
             <Button 
@@ -98,13 +105,22 @@
             Click="Clear" 
             FontFamily="/Fonts/#Roboto"
             Content="Clear All" 
-            Margin="0,35,50,0">
+            Margin="0,35,50,0"
+                ToolTipService.ShowDuration="4000"
+                ToolTipService.InitialShowDelay="500">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
                             Value="7" />
                     </Style>
                 </Button.Resources>
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="DemiBold">Clear the textbox</TextBlock>
+                        <TextBlock></TextBlock>
+                        <TextBlock>This will also remove all selected files</TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
             </Button>
 
             <Button 
@@ -115,13 +131,22 @@
             Margin="50,35,0,0" 
             VerticalAlignment="Top" 
             FontFamily="/Fonts/#Roboto"
-            Width="75">
+            Width="75"
+                ToolTipService.ShowDuration="4000"
+                ToolTipService.InitialShowDelay="500">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
                             Value="7" />
                     </Style>
                 </Button.Resources>
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="DemiBold">Select file(s) for translation</TextBlock>
+                        <TextBlock></TextBlock>
+                        <TextBlock>Upload a .txt, .pdf</TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
             </Button>
 
             <ListBox Name="multiLangSelect"
@@ -215,13 +240,20 @@
                     Margin="50,10"
                     VerticalAlignment="Bottom"
                     Width="100"
-                    Grid.Row="1" >
+                    Grid.Row="1" 
+                    ToolTipService.InitialShowDelay="500"
+                ToolTipService.ShowDuration="4000">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
                             Value="7" />
                     </Style>
                 </Button.Resources>
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="DemiBold">Switch to single language translation</TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
             </Button>
 
             <Button x:Name="MultiLangButton" 
@@ -231,13 +263,20 @@
                     Margin="160,50,10,10"
                     VerticalAlignment="Bottom"
                     Width="100"
-                    Grid.Row="1">
+                    Grid.Row="1"
+                    ToolTipService.InitialShowDelay="500"
+                ToolTipService.ShowDuration="4000">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
                             Value="7" />
                     </Style>
                 </Button.Resources>
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="DemiBold">Switch to multiple languages translation</TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
             </Button>
 
             <Button 
@@ -247,14 +286,22 @@
                 Width="40"
                 Click="ClearList" 
                 FontFamily="/Fonts/#Roboto"
-                Content="Clear" Margin="468,166.333,142,529.667">
+                Content="Clear" Margin="468,166.333,142,529.667"
+                ToolTipService.InitialShowDelay="500"
+                ToolTipService.ShowDuration="4000">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius"
                             Value="7" />
                     </Style>
                 </Button.Resources>
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="DemiBold">Remove all selected language(s)</TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
             </Button>
+
             <TextBox
                 Visibility="Hidden"
                 Grid.Row="1" 
