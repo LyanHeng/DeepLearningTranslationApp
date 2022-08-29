@@ -121,6 +121,27 @@
 
             <Button 
             Grid.Row="1" 
+            Grid.Column="1" 
+            Width="120"
+            Click="SwapLanguage" 
+            FontFamily="/Fonts/#Roboto"
+            Content="Swap Languages" 
+            Margin="15.6,15.8,14.8,640.8">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius"
+                            Value="7" />
+                    </Style>
+                </Button.Resources>
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="DemiBold">Swap source and target languages</TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
+            </Button>
+
+            <Button 
+            Grid.Row="1" 
             Grid.Column="0" 
             Width="75"
             VerticalAlignment="Top"
