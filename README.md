@@ -8,15 +8,16 @@ The main aim of the project is to provide a translation application that builds 
 
 ### First Page:
 
-![alt text](/TranslationApp/Images/FirstPage.PNG)
+![alt text](/TranslationApp/Images/WordWiseFirstPage.PNG)
 
 ### Second Page:
 
-![alt text](/TranslationApp/Images/SecondPage.PNG)
+![alt text](/TranslationApp/Images/WordWiseSecondPage.PNG)
 
 ---
 
 The project will be used for the following objectives:
+
 - Provide an interface to perform simple but effective translations
 - Provide an interface to perform file translations
 - Provide an interface to translate to multiple languages
@@ -43,9 +44,9 @@ To build and use the project:
 3. Load the project by running the csproj file on Visual Studio.
 4. Navigate to the NUGET installer and install **Google.Cloud.Translation.V2** package.
 5. Install **PDFsharp-MigraDoc-gdi** package.
-6. Once done, click **Build/Run**. 
-    - **Build** will created a bin folder that contains either Debug or Release folder. This can be changed in Visual Studio as well.
-    - **Run** will build and run the executable created.
+6. Once done, click **Build/Run**.
+   - **Build** will created a bin folder that contains either Debug or Release folder. This can be changed in Visual Studio as well.
+   - **Run** will build and run the executable created.
 
 ---
 

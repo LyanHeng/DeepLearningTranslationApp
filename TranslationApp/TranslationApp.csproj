@@ -6,7 +6,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <UseWPF>true</UseWPF>
     <AssemblyName>WordWise</AssemblyName>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>wordwise_logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
