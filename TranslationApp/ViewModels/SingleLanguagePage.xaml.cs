@@ -187,10 +187,18 @@ namespace TranslationApp
                 if (response.Language != null)
                 {
                     fileName.Items.Clear();
-                    box2.SelectedItem = App.LanguageKeys.FirstOrDefault(x => x.Value == response.Language).Key;
+                    // fix for mismatched language code for simplified chinese
+                    if (response.Language == "zh-CN")
+                    {
+                        box2.SelectedItem = "Chinese (Simplified)";
+                    }
+                    else
+                    {
+                        box2.SelectedItem = App.LanguageKeys.FirstOrDefault(x => x.Value == response.Language).Key;
+                    }
                     // move already translated text to be translated again
                     textToTranslate.Text = translatedText.Text;
-                    translatedText.Text = response.Language;                    
+                    translatedText.Text = String.Empty;                    
                 }
                 else
                 {
