@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Text.RegularExpressions;
 using System.Windows.Navigation;
 using TranslationApp.Views;
+using System.Linq;
 
 namespace TranslationApp
 {
@@ -174,6 +175,40 @@ namespace TranslationApp
             // translate
             string translatedResult = Translate(textToTranslate.Text, box2.SelectedItem.ToString());
             translatedText.Text = translatedResult;
+        }
+
+        // swap target and source language
+        private void SwapLanguage(object sender, RoutedEventArgs e)
+        {
+            if (translatedText.Text != "")
+            {
+                // detect initial source language
+                var response = App.Client.DetectLanguage(textToTranslate.Text);
+                if (response.Language != null)
+                {
+                    fileName.Items.Clear();
+                    // fix for mismatched language code for simplified chinese
+                    if (response.Language == "zh-CN")
+                    {
+                        box2.SelectedItem = "Chinese (Simplified)";
+                    }
+                    else
+                    {
+                        box2.SelectedItem = App.LanguageKeys.FirstOrDefault(x => x.Value == response.Language).Key;
+                    }
+                    // move already translated text to be translated again
+                    textToTranslate.Text = translatedText.Text;
+                    translatedText.Text = String.Empty;                    
+                }
+                else
+                {
+                    MessageBox.Show("Error swapping languages.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("No text to swap.");
+            }
         }
 
         // clear filename textbox
