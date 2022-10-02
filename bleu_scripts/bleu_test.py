@@ -1,14 +1,23 @@
+from cProfile import label
 from multiprocessing import current_process
 from unittest import result
 from nltk.translate import bleu
+from nltk.translate.bleu_score import SmoothingFunction
 import pandas as pd
+import numpy as np
 import statistics as statistics
+import matplotlib.pyplot as plt
+from matplotlib.widgets import CheckButtons
 
 
 def main():
-    filename = r'dataset.xlsx'
+    filename = r'full_dataset.xlsx'
     sheetname = r'dataset'
     number_of_mrs = 7
+
+    # type of plot
+    # True - line plot; False - scatter plot
+    is_line_plot = False
 
     # retrieve data by MR group
     data = get_data_by_mr(
@@ -23,9 +32,40 @@ def main():
         i = i+1
 
     # calculate average of each group and print average score
+    # plot to see the relationships
     for key in result_by_mr:
         average_score = statistics.mean(result_by_mr[key])
         print(f"Average BLEU score of {key}: {str(average_score)}")
+
+    # plot data
+    lineplot_data(results=result_by_mr, is_line_plot=is_line_plot)
+
+
+# line plot
+def lineplot_data(results, is_line_plot=False):
+    fig, ax = plt.subplots()
+    plot_type = "" if is_line_plot else "o"
+
+    lines = []
+    for key in results:
+        newplot, = ax.plot(results[key], plot_type, visible=True, label=key)
+        ax.legend()
+        lines.append(newplot)
+    plt.subplots_adjust(left=0.2)
+
+    # Make checkbuttons with all plotted lines with correct visibility
+    rax = plt.axes([0.05, 0.4, 0.1, 0.15])
+    labels = [str(line.get_label()) for line in lines]
+    visibility = [line.get_visible() for line in lines]
+    check = CheckButtons(rax, labels, visibility)
+
+    def func(label):
+        index = labels.index(label)
+        lines[index].set_visible(not lines[index].get_visible())
+        plt.draw()
+
+    check.on_clicked(func)
+    plt.show()
 
 
 # retrieve data from file separating them into MR groups
@@ -66,7 +106,8 @@ def calculate_MR_bleu_score(followups, results):
 
 # calculate bleu score of each sentence pair
 def bleu_score(reference, candidate):
-    return bleu(reference, candidate, (2,))
+    # smoothing = SmoothingFunction().method1
+    return bleu(reference, candidate, (1,))
 
 
 if __name__ == '__main__':
