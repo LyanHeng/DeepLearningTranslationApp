@@ -7,7 +7,7 @@ from matplotlib.widgets import CheckButtons
 
 
 def main():
-    filename = r'full_dataset.xlsx'
+    filename = r'dataset3.xlsx'
     sheetname = r'dataset'
     number_of_mrs = 7
 
