@@ -1,10 +1,6 @@
-from cProfile import label
-from multiprocessing import current_process
-from unittest import result
 from nltk.translate import bleu
 from nltk.translate.bleu_score import SmoothingFunction
 import pandas as pd
-import numpy as np
 import statistics as statistics
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
@@ -17,7 +13,7 @@ def main():
 
     # type of plot
     # True - line plot; False - scatter plot
-    is_line_plot = False
+    is_line_plot = True
 
     # applying smoothing technique, default is method 4
     smoothing_enabled = True
