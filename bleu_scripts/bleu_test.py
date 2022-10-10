@@ -1,19 +1,16 @@
 from nltk.translate import bleu
 from nltk.translate.bleu_score import SmoothingFunction
 import pandas as pd
+import numpy as np
 import statistics as statistics
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
 
 
 def main():
-    filename = r'dataset3.xlsx'
+    filename = r'full_dataset.xlsx'
     sheetname = r'dataset'
     number_of_mrs = 7
-
-    # type of plot
-    # True - line plot; False - scatter plot
-    is_line_plot = True
 
     # applying smoothing technique, default is method 4
     smoothing_enabled = True
@@ -36,21 +33,29 @@ def main():
     # plot to see the relationships
     print("\nAverage BLEU Scores")
     for key in result_by_mr:
-        average_score = statistics.mean(result_by_mr[key])
+        average_score = statistics.mean(d for d in result_by_mr[key] if d is not None)
         print(f"Average BLEU score of {key}: {str(average_score)}")
 
     # plot data
-    lineplot_data(results=result_by_mr, is_line_plot=is_line_plot)
+    lineplot_data(results=result_by_mr)
 
 
 # line plot
-def lineplot_data(results, is_line_plot=False):
+def lineplot_data(results):
     fig, ax = plt.subplots()
-    plot_type = "" if is_line_plot else "o"
+
+    # get range of graph
+    longest_length = 0
+    for key in results:
+        if longest_length < len(results[key]):
+            longest_length = len(results[key])
+    xs = np.arange(longest_length)
 
     lines = []
     for key in results:
-        newplot, = ax.plot(results[key], plot_type, visible=True, label=key)
+        series = np.array(results[key]).astype(np.double)
+        mask = np.isfinite(series)
+        newplot, = ax.plot(xs[mask], series[mask], linestyle='-', marker='o', visible=True, label=key)
         ax.legend()
         lines.append(newplot)
     plt.subplots_adjust(left=0.2)
@@ -80,9 +85,11 @@ def get_data_by_mr(filename, sheetname, number_of_mrs=0):
     # get data by MR
     for i in range(number_of_mrs):
         # get all MR data without blank (-) test cases (i.e. MR1)
-        mask = (df['MR'] == i+1) & (df['Followup'] != "-")
+        #mask = (df['MR'] == i+1) & (df['Followup'] != "-")
+        mask = df['MR'] == i+1
+        unused_mask = df['Followup'] != "-"
         current_mr_data = df.loc[mask]
-        usable_data += len(current_mr_data)
+        usable_data += len(df.loc[unused_mask])
         # append data to current_mr_data
         data_by_mr.append(current_mr_data)
 
@@ -103,8 +110,11 @@ def calculate_MR_bleu_score(followups, results, smoothing_enabled):
         return -1
 
     for i in range(followups.size-1):
-        bleu_scores.append(bleu_score(
-            reference=followups[i], candidate=results[i], smoothing_enabled=smoothing_enabled))
+        if (followups[i] == "-"):
+            bleu_scores.append(None)
+        else:
+            bleu_scores.append(bleu_score(
+                reference=followups[i], candidate=results[i], smoothing_enabled=smoothing_enabled))
 
     return bleu_scores
 
