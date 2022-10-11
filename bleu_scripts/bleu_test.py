@@ -5,6 +5,7 @@ import numpy as np
 import statistics as statistics
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
+import csv
 
 
 def main():
@@ -12,8 +13,15 @@ def main():
     sheetname = r'dataset'
     number_of_mrs = 7
 
+    # file to write bleu scores to
+    filename_only = filename.split('.')[0]
+    outputFilePath = fr'bleu_scores_{filename_only}.csv'
+
     # applying smoothing technique, default is method 4
     smoothing_enabled = True
+
+    # write bleu scores to file, toggle off if not needed
+    enable_write_to_file = False
 
     # retrieve data by MR group
     data, num_usable_data, num_total_data = get_data_by_mr(
@@ -24,9 +32,15 @@ def main():
     # calcualate BLEU score for each MR group
     result_by_mr = {}
     i = 1
+    if enable_write_to_file: 
+        write_to_file(outputFilePath, "mr", None, "bleu_score")
     for each_data in data:
-        result_by_mr.update({f"MR{i}": calculate_MR_bleu_score(
-            each_data['Followup'], each_data['Result'], smoothing_enabled)})
+        scores = calculate_MR_bleu_score(
+            each_data['Followup'], each_data['Result'], smoothing_enabled)
+        result_by_mr.update({f"MR{i}": scores})
+        # write to file if needed
+        if enable_write_to_file: 
+            write_to_file(outputFilePath, i, scores, None)
         i = i+1
 
     # calculate average of each group and print average score
@@ -75,6 +89,24 @@ def lineplot_data(results):
     plt.show()
 
 
+# write bleu score to external file
+def write_to_file(filePath, mr=None, bleu_scores=None, data_info=None):
+    with open(filePath, 'a', newline='') as f:
+        writer = csv.writer(f)
+        if data_info is not None:
+            if mr is not None:
+                writer.writerow([mr, data_info])
+            else:
+                writer.writerow([data_info])
+        if bleu_scores is not None:
+            bleu_scores = [x for x in bleu_scores if x is not None]
+            if mr is not None:
+                writer.writerows(map(lambda x: [mr,x], bleu_scores))
+            else:
+                writer.writerows(map(lambda x: [x], bleu_scores))
+        f.close()
+
+
 # retrieve data from file separating them into MR groups
 def get_data_by_mr(filename, sheetname, number_of_mrs=0):
     df = pd.read_excel(filename, sheetname)
@@ -87,7 +119,7 @@ def get_data_by_mr(filename, sheetname, number_of_mrs=0):
         # get all MR data without blank (-) test cases (i.e. MR1)
         #mask = (df['MR'] == i+1) & (df['Followup'] != "-")
         mask = df['MR'] == i+1
-        unused_mask = df['Followup'] != "-"
+        unused_mask = (df['MR'] == i+1) & (df['Followup'] != "-")
         current_mr_data = df.loc[mask]
         usable_data += len(df.loc[unused_mask])
         # append data to current_mr_data
