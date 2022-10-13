@@ -90,7 +90,7 @@ def lineplot_data(results):
 
 
 # write bleu score to external file
-def write_to_file(filePath, mr=None, bleu_scores=None, data_info=None):
+def write_to_file(filePath, mr=None, bleu_scores=None, data_info=None, write_blank_scores=False):
     with open(filePath, 'a', newline='') as f:
         writer = csv.writer(f)
         if data_info is not None:
@@ -99,7 +99,8 @@ def write_to_file(filePath, mr=None, bleu_scores=None, data_info=None):
             else:
                 writer.writerow([data_info])
         if bleu_scores is not None:
-            bleu_scores = [x for x in bleu_scores if x is not None]
+            if not write_blank_scores:
+                bleu_scores = [x for x in bleu_scores if x is not None]
             if mr is not None:
                 writer.writerows(map(lambda x: [mr,x], bleu_scores))
             else:
@@ -141,7 +142,7 @@ def calculate_MR_bleu_score(followups, results, smoothing_enabled):
     if (followups.size != results.size):
         return -1
 
-    for i in range(followups.size-1):
+    for i in range(followups.size):
         if (followups[i] == "-"):
             bleu_scores.append(None)
         else:
