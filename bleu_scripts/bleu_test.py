@@ -15,13 +15,16 @@ def main():
 
     # file to write bleu scores to
     filename_only = filename.split('.')[0]
-    outputFilePath = fr'bleu_scores_{filename_only}.csv'
+    outputCsvFilePath = fr'bleu_scores_{filename_only}.csv'
+    outputWriteBackFilePath = fr'bleu_scores_write_back_{filename_only}.csv'
 
     # applying smoothing technique, default is method 4
     smoothing_enabled = True
 
     # write bleu scores to file, toggle off if not needed
     enable_write_to_file = False
+    enable_write_back = False
+    enable_write_back_header = True
 
     # retrieve data by MR group
     data, num_usable_data, num_total_data = get_data_by_mr(
@@ -33,14 +36,18 @@ def main():
     result_by_mr = {}
     i = 1
     if enable_write_to_file: 
-        write_to_file(outputFilePath, "mr", None, "bleu_score")
+        write_to_external_file(outputCsvFilePath, "mr", None, "bleu_score")
     for each_data in data:
         scores = calculate_MR_bleu_score(
             each_data['Followup'], each_data['Result'], smoothing_enabled)
         result_by_mr.update({f"MR{i}": scores})
         # write to file if needed
         if enable_write_to_file: 
-            write_to_file(outputFilePath, i, scores, None)
+            write_to_external_file(outputCsvFilePath, i, scores, None, False)
+        if enable_write_back:
+            if (i != 1):
+                enable_write_back_header = False
+            write_back(outputWriteBackFilePath, each_data, scores, enable_write_back_header)
         i = i+1
 
     # calculate average of each group and print average score
@@ -90,7 +97,7 @@ def lineplot_data(results):
 
 
 # write bleu score to external file
-def write_to_file(filePath, mr=None, bleu_scores=None, data_info=None, write_blank_scores=False):
+def write_to_external_file(filePath, mr=None, bleu_scores=None, data_info=None, write_blank_scores=False):
     with open(filePath, 'a', newline='') as f:
         writer = csv.writer(f)
         if data_info is not None:
@@ -106,6 +113,12 @@ def write_to_file(filePath, mr=None, bleu_scores=None, data_info=None, write_bla
             else:
                 writer.writerows(map(lambda x: [x], bleu_scores))
         f.close()
+
+
+# write back to the main csv
+def write_back(filename, dataframe, bleu_scores, enable_header):
+    dataframe['BLEU_Score'] = bleu_scores
+    dataframe.to_csv(filename, mode='a', encoding='utf-8-sig', index=False, header=enable_header)
 
 
 # retrieve data from file separating them into MR groups
@@ -147,7 +160,7 @@ def calculate_MR_bleu_score(followups, results, smoothing_enabled):
             bleu_scores.append(None)
         else:
             bleu_scores.append(bleu_score(
-                reference=followups[i], candidate=results[i], smoothing_enabled=smoothing_enabled))
+                reference=[followups[i].split()], candidate=results[i].split(), smoothing_enabled=smoothing_enabled))
 
     return bleu_scores
 
